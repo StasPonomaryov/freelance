@@ -1,0 +1,28 @@
+.item {
+  font-size: 18px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 1rem;
+
+  svg, a, span {
+    display: inline;
+    vertical-align: middle;
+  }
+
+  .submenu {
+    display: block;
+    padding: 1rem 2rem 0 2rem;
+
+    li {
+      font-size: 1rem;
+      margin-bottom: .5rem;
+    }
+  }
+
+  > svg {
+    margin-right: 0.5rem;
+  }
+}
+.active {
+  color: darken($color: #fff, $amount: 25)
+}

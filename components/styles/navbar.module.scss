@@ -1,0 +1,33 @@
+@import '@/styles/mixins';
+
+.navbar {
+  display: flex;
+  padding: .5rem;
+}
+.leftside {
+  display: flex;
+}
+.avatar {
+  @include random-bg();
+  align-items: center;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  margin-right: .5rem; 
+  padding: .25rem;
+  width: 24px;
+
+  span {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .55);
+  }
+}
+.userinfo {
+  font-size: px-to-rem(14);
+  font-weight: 300;
+}
+.logout {
+  cursor: pointer;
+  font-size: px-to-rem(14);
+  margin-left: auto;
+  text-decoration: underline;
+}
