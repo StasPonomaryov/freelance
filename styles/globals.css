@@ -25,18 +25,12 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
-
-.site-header { grid-area: header }
-.site-sidebar { grid-area: sidebar }
-.site-content { grid-area: content }
-.site-footer { grid-area: footer }
-
-.grid-container {
-  display: grid;
-  grid-template-areas: 
-    'header header'
-    'sidebar content'
-    'footer footer';
-  grid-template-columns: 15fr 85fr;
-  grid-template-rows   : auto 1fr auto;
+@media (max-width: 560px) {
+  .grid-cols-sidebar-collapsed {
+    grid-template-columns: unset!important;
+  }
+  .grid-cols-sidebar-collapsed
+    .site-content {
+      padding-left: 80px;
+    }
 }

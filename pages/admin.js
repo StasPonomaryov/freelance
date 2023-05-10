@@ -1,7 +1,5 @@
 import Content from '@/components/Content';
 
-const Admin = () => {
+export default function Admin() {
   return <Content />;
 };
-
-export default Admin;

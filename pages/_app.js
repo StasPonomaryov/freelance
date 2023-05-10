@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 
 import { AuthUserProvider } from '../context/AuthUserContext';
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
     <AuthUserProvider>
       <Layout>
@@ -12,5 +12,3 @@ function MyApp({ Component, pageProps }) {
     </AuthUserProvider>
   );
 }
-
-export default MyApp;
