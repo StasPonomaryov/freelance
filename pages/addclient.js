@@ -2,22 +2,28 @@ import { nanoid } from 'nanoid';
 import useForm from '@/hooks/useAddClientForm';
 import validate from '@/utils/AddClientValidationRules';
 import setClient from '@/controllers/setClient';
+import { useState } from 'react';
+import Alert from '@/components/Alert';
 
 export default function AddClient() {
   const { values, errors, handleChange, handleSubmit } = useForm(
     submitCallback,
     validate
   );
+  const [saved, setSaved] = useState(false);
+
   function submitCallback() {
     const clientId = nanoid(8);
     const clientData = {
       id: clientId,
       name: values.clientName,
       description: values.clientDescription,
-      contacts: values.clientContacts
+      contacts: values.clientContacts,
     };
     console.log('>>>SUBMITTING DATA', clientData);
-    setClient(clientData).then((r) => console.log(r));
+    setClient(clientData)
+      .then((r) => setSaved(true))
+      .catch((e) => <Alert type="danger" message={e} />);
   }
 
   return (
@@ -96,6 +102,7 @@ export default function AddClient() {
               <p className="text-sm text-red-800">{errors.clientContacts}</p>
             )}
           </div>
+          {saved ? <Alert type="info" message="Client added!" /> : ''}
           <button
             type="submit"
             className="text-white bg-blue-600

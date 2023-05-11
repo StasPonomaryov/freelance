@@ -27,10 +27,18 @@ body {
 }
 @media (max-width: 560px) {
   .grid-cols-sidebar-collapsed {
-    grid-template-columns: unset!important;
+    grid-template-columns: unset !important;
   }
-  .grid-cols-sidebar-collapsed
-    .site-content {
-      padding-left: 80px;
-    }
+  .grid-cols-sidebar-collapsed .site-content,
+  .grid-cols-sidebar-collapsed .clients,
+  .grid-cols-sidebar-collapsed .add-client {
+    padding-left: 80px;
+  }
+}
+
+.td-class {
+  @apply px-4 py-3 bg-gray-200 first:rounded-t-lg last:rounded-b-lg sm:first:rounded-t-none sm:last:rounded-b-none sm:first:rounded-tl-lg sm:first:rounded-bl-lg sm:last:rounded-tr-lg sm:last:rounded-br-lg dark:bg-gray-600
+}
+.tr-class {
+  @apply flex flex-col mb-4 sm:table-row
 }
