@@ -1,4 +1,12 @@
-import { collection, doc, getDoc, getDocs, setDoc, query } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+  query,
+} from 'firebase/firestore';
 
 export class CloudDb {
   constructor(database) {
@@ -43,6 +51,12 @@ export class CloudDb {
     return await setDoc(
       doc(this.cloudDb, this.clients, `${clientData.id}`),
       clientData
+    );
+  }
+
+  async removeClient(clientId) {
+    return await deleteDoc(
+      doc(this.cloudDb, this.clients, `${clientId}`)
     );
   }
 }
