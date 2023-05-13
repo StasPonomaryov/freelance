@@ -12,6 +12,7 @@ export default function ButtonGroup(props) {
           roundedRight={index === buttons.length - 1}
           icon={button.icon}
           label={button.label}
+          onClick={button.onClick}
         />
       ))}
     </div>

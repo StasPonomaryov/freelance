@@ -16,8 +16,8 @@ export default function Table(props) {
         {trs.map((tr, index) => (
           <tr className="tr-class" key={index}>
             {tr.map((td, index) => (
-              <td key={index} className="td-class">
-                {td}
+              <td key={index} className="td-class" width={td.width}>
+                {td.cell}
               </td>
             ))}
           </tr>

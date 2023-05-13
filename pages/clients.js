@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 import getClients from '@/controllers/getClients';
 import Alert from '@/components/Alert';
@@ -7,11 +7,15 @@ import Checkbox from '@/components/Checkbox';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ButtonGroup from '@/components/ButtonGroup';
 import Pagination from '@/components/Pagination';
+import Modal from '@/components/Modal';
 import { paginate } from '@/utils/Paginate';
+import removeClient from '@/controllers/removeClient';
 
-export default function Clients({ clients }) {
+export default function Clients() {
+  const [clients, setClients] = useState([]);
   const [checkedClients, setCheckedClients] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModalRemove, setShowModalRemove] = useState(false);
   const pageSize = 10;
   const paginatedPosts = paginate(clients, currentPage, pageSize);
 
@@ -28,9 +32,41 @@ export default function Clients({ clients }) {
     }
   };
 
+  const handleEditButton = () => {
+    console.log('>>>EDIT CLIENTS CLICKED', checkedClients);
+  };
+
+  const handleRemoveButton = () => {
+    console.log('>>>REMOVE CLIENTS CLICKED', checkedClients);
+    if (checkedClients.length) {
+      console.log('>>>OPEN MODAL');
+      setShowModalRemove(true);
+    }
+  };
+  const approveRemoving = async () => {
+    console.log('>>>CHECKED IDS', checkedClients);
+    for (let i in checkedClients) {
+      console.log('>>>REMOVING CLINET', checkedClients[i]);
+      removeClient(checkedClients[i])
+        .then(() => {
+          const filtered = clients.filter((c) => c.id !== checkedClients[i]);
+          console.log('>>>FILTERED', filtered);
+          setClients(filtered)
+        });
+    }
+    setShowModalRemove(false);
+  }
+
   const onPageChange = (page) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    getClients()
+      .then((data) => {
+        setClients(data);
+      });    
+  }, [])
 
   return (
     <main className="clients bg-amber-200 dark:bg-gray-800 p-3">
@@ -45,18 +81,33 @@ export default function Clients({ clients }) {
                 ths={['Name', 'Description', 'Contacts', 'Check']}
                 trs={paginatedPosts.map((client) => {
                   return [
-                    client.name,
-                    client.description,
-                    client.contacts,
-                    <Checkbox
-                      key={client.id}
-                      checked={
-                        checkedClients.includes(client.id) ? true : false
-                      }
-                      value={client.id}
-                      name={`action_${client.id}`}
-                      onChange={handleOnChange}
-                    />,
+                    {
+                      cell: client.name,
+                      width: '25%',
+                    },
+                    {
+                      cell: client.description,
+                      width: '40%',
+                    },
+                    {
+                      cell: client.contacts,
+                      width: '30%',
+                    },
+                    {
+                      cell: (
+                        <Checkbox
+                          key={client.id}
+                          checked={
+                            checkedClients.includes(client.id) ? true : false
+                          }
+                          value={client.id}
+                          name={`action_${client.id}`}
+                          onChange={handleOnChange}
+                          width="16"
+                        />
+                      ),
+                      width: '5%',
+                    },
                   ];
                 })}
               />
@@ -82,24 +133,37 @@ export default function Clients({ clients }) {
               {
                 icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
                 label: 'Edit client(s)',
+                onClick: handleEditButton,
               },
               {
                 icon: <BiTrash className="w-4 h-4 mr-2 fill-current" />,
                 label: 'Remove client(s)',
+                onClick: handleRemoveButton,
               },
             ]}
           />
         ) : (
           ''
         )}
+        {showModalRemove && (
+          <Modal
+            title="Removing client(s)"
+            text={`Do you really want to remove ${checkedClients.length} client(s)?`}
+            setOpenModal={setShowModalRemove}
+            buttons={[
+              {
+                label: 'Yes',
+                background: 'red',
+                click: approveRemoving
+              },
+              {
+                label: 'No',
+                background: '',
+              },
+            ]}
+          />
+        )}
       </div>
     </main>
   );
-}
-export async function getStaticProps() {
-  const clients = await getClients();
-
-  return {
-    props: { clients },
-  };
 }
