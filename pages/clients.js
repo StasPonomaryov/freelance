@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BiEdit, BiTrash } from 'react-icons/bi';
+import { BiEdit, BiRefresh, BiTrash } from 'react-icons/bi';
 import getClients from '@/controllers/getClients';
 import Alert from '@/components/Alert';
 import Table from '@/components/Table';
@@ -9,18 +9,44 @@ import ButtonGroup from '@/components/ButtonGroup';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/Modal';
 import { paginate } from '@/utils/Paginate';
-import removeClient from '@/controllers/removeClient';
+import removeClients from '@/controllers/removeClient';
+import updateClients from '@/controllers/updateClients';
 
 export default function Clients() {
   const [clients, setClients] = useState([]);
+  const [formInputData, setFormInputData] = useState([]);
   const [checkedClients, setCheckedClients] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModalRemove, setShowModalRemove] = useState(false);
+  const [editingMode, setEditingMode] = useState(false);
+  const [updateButtonActive, setUpdateButtonActive] = useState(false);
   const pageSize = 10;
   const paginatedPosts = paginate(clients, currentPage, pageSize);
+  const isChecked = (id) => {
+    return checkedClients.some((client) => client === id);
+  };
+  const actionButtons = [
+    {
+      icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
+      label: 'Edit client(s)',
+      onClick: handleEditButton,
+      active: true,
+    },
+    {
+      icon: <BiRefresh className="w-4 h-4 mr-2 fill-current b-green" />,
+      label: 'Update',
+      onClick: handleFormSubmit,
+      active: updateButtonActive,
+    },
+    {
+      icon: <BiTrash className="w-4 h-4 mr-2 fill-current" />,
+      label: 'Remove client(s)',
+      onClick: handleRemoveButton,
+      active: true,
+    },
+  ];
 
-  const handleOnChange = (event) => {
-    console.log('>>>CLICK', event.target.value, checkedClients);
+  function handleCheckboxChange(event) {
     const selectedId = event.target.value;
     if (checkedClients.includes(selectedId)) {
       const newIds = checkedClients.filter((id) => id !== selectedId);
@@ -30,43 +56,76 @@ export default function Clients() {
       newIds.push(selectedId);
       setCheckedClients(newIds);
     }
-  };
+  }
 
-  const handleEditButton = () => {
-    console.log('>>>EDIT CLIENTS CLICKED', checkedClients);
-  };
+  function handleTableChange(event) {
+    if (event.target.value === '' && event.target.required === true) {
+      event.target.style.background = '#a00';
+    } else {
+      event.target.style.background = '';
+    }
+    const updatedRow = formInputData.filter((r) => r.id === event.target.id);
+    if (updatedRow.length) {
+      updatedRow[0][event.target.name] = event.target.value;
+      setFormInputData([...formInputData, updatedRow[0]]);
+    } else {
+      const setRow = clients.filter((r) => r.id === event.target.id);
+      setRow[0][event.target.name] = event.target.value;
+      setFormInputData([...formInputData, setRow[0]]);
+    }
+  }
 
-  const handleRemoveButton = () => {
-    console.log('>>>REMOVE CLIENTS CLICKED', checkedClients);
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    let emptyInput = [];
+    formInputData.forEach((i) => {
+      if (Object.values(i).some((v) => v === '')) emptyInput.push(i);
+    });
+    if (!emptyInput.length) {
+      console.log('>>>FORMINPUT', formInputData);
+      const newData = (data) => [...data, formInputData];
+      updateClients(formInputData).then(() => {
+        setClients(newData);
+      });
+      setFormInputData(newData);
+      setCheckedClients([]);
+    }
+  }
+
+  function handleEditButton() {
+    setUpdateButtonActive(true);
+    setEditingMode(true);
+  }
+
+  function handleRemoveButton() {
     if (checkedClients.length) {
-      console.log('>>>OPEN MODAL');
       setShowModalRemove(true);
     }
-  };
-  const approveRemoving = async () => {
-    console.log('>>>CHECKED IDS', checkedClients);
-    for (let i in checkedClients) {
-      console.log('>>>REMOVING CLINET', checkedClients[i]);
-      removeClient(checkedClients[i])
-        .then(() => {
-          const filtered = clients.filter((c) => c.id !== checkedClients[i]);
-          console.log('>>>FILTERED', filtered);
-          setClients(filtered)
-        });
-    }
+  }
+
+  async function approveRemoving() {
+    removeClients(checkedClients).then(() => {
+      let clientsCopy = [...clients];
+      checkedClients.forEach((i) => {
+        clientsCopy = clientsCopy.filter((c) => c.id !== i);
+      });
+      setClients(clientsCopy);
+    });
+    setCheckedClients([]);
     setShowModalRemove(false);
   }
 
-  const onPageChange = (page) => {
+  function onPageChange(page) {
     setCurrentPage(page);
-  };
+  }
 
   useEffect(() => {
-    getClients()
-      .then((data) => {
-        setClients(data);
-      });    
-  }, [])
+    getClients().then((data) => {
+      setClients(data);
+    });
+  }, []);
+
+  console.log(clients);
 
   return (
     <main className="clients bg-amber-200 dark:bg-gray-800 p-3">
@@ -74,77 +133,76 @@ export default function Clients() {
         Clients list
       </h1>
       <div className="container p-4">
-        <div className="flex flex-col ml-4 sm:ml-0">
-          {clients.length > 0 ? (
-            <>
-              <Table
-                ths={['Name', 'Description', 'Contacts', 'Check']}
-                trs={paginatedPosts.map((client) => {
-                  return [
+        {clients.length > 0 ? (
+          <form
+            className="flex flex-col ml-4 sm:ml-0"
+            onSubmit={handleFormSubmit}
+          >
+            <Table
+              onChangeInput={handleTableChange}
+              ths={['Name', 'Description', 'Contacts', 'Check']}
+              trs={paginatedPosts.map((client) => {
+                return {
+                  id: client.id,
+                  tds: [
                     {
                       cell: client.name,
+                      label: 'name',
                       width: '25%',
+                      required: true,
+                      checked: isChecked(client.id) && editingMode,
                     },
                     {
                       cell: client.description,
+                      label: 'description',
                       width: '40%',
+                      checked: isChecked(client.id) && editingMode,
                     },
                     {
                       cell: client.contacts,
+                      label: 'contacts',
+                      required: true,
                       width: '30%',
+                      checked: isChecked(client.id) && editingMode,
                     },
                     {
                       cell: (
                         <Checkbox
-                          key={client.id}
-                          checked={
-                            checkedClients.includes(client.id) ? true : false
-                          }
+                          onChange={handleCheckboxChange}
                           value={client.id}
+                          checked={isChecked(client.id)}
                           name={`action_${client.id}`}
-                          onChange={handleOnChange}
-                          width="16"
                         />
                       ),
                       width: '5%',
                     },
-                  ];
-                })}
-              />
+                  ],
+                };
+              })}
+            />
+            <div className="flex flex-row justify-between">
               <Pagination
                 items={clients.length}
                 currentPage={currentPage}
                 pageSize={pageSize}
                 onPageChange={onPageChange}
               />
-            </>
-          ) : (
-            <>
-              <LoadingSpinner />
-              {!clients.length && (
-                <Alert type="warning" message="No clients found" />
+              {checkedClients.length ? (
+                <ButtonGroup buttons={actionButtons} />
+              ) : (
+                ''
               )}
-            </>
-          )}
-        </div>
-        {checkedClients.length ? (
-          <ButtonGroup
-            buttons={[
-              {
-                icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
-                label: 'Edit client(s)',
-                onClick: handleEditButton,
-              },
-              {
-                icon: <BiTrash className="w-4 h-4 mr-2 fill-current" />,
-                label: 'Remove client(s)',
-                onClick: handleRemoveButton,
-              },
-            ]}
-          />
+            </div>
+          </form>
         ) : (
-          ''
+          <>
+            <LoadingSpinner />
+            {!clients.length && (
+              <Alert color="orange" message="No clients found" />
+            )}
+          </>
         )}
+
         {showModalRemove && (
           <Modal
             title="Removing client(s)"
@@ -154,7 +212,7 @@ export default function Clients() {
               {
                 label: 'Yes',
                 background: 'red',
-                click: approveRemoving
+                click: approveRemoving,
               },
               {
                 label: 'No',

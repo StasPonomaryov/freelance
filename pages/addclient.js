@@ -23,7 +23,7 @@ export default function AddClient() {
     console.log('>>>SUBMITTING DATA', clientData);
     setClient(clientData)
       .then((r) => setSaved(true))
-      .catch((e) => <Alert type="danger" message={e} />);
+      .catch((e) => <Alert color="red" message={e} />);
   }
 
   return (
@@ -102,7 +102,7 @@ export default function AddClient() {
               <p className="text-sm text-red-800">{errors.clientContacts}</p>
             )}
           </div>
-          {saved ? <Alert type="info" message="Client added!" /> : ''}
+          {saved ? <Alert color="blue" message="Client added!" /> : ''}
           <button
             type="submit"
             className="text-white bg-blue-600

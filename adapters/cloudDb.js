@@ -4,8 +4,10 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  updateDoc,
   deleteDoc,
   query,
+  writeBatch
 } from 'firebase/firestore';
 
 export class CloudDb {
@@ -54,9 +56,21 @@ export class CloudDb {
     );
   }
 
-  async removeClient(clientId) {
-    return await deleteDoc(
-      doc(this.cloudDb, this.clients, `${clientId}`)
-    );
+  async updateClients(clientsData) {
+    const batch = writeBatch(this.cloudDb);
+    for (const currentClient of clientsData) {
+      const docRef = doc(this.cloudDb, this.clients, `${currentClient.id}`);
+      batch.update(docRef, currentClient);
+    }
+    return await batch.commit();
+  }
+
+  async removeClients(clientsIds) {
+    const batch = writeBatch(this.cloudDb);
+    for (const currentClient of clientsIds) {
+      const docRef = doc(this.cloudDb, this.clients, `${currentClient}`);
+      batch.delete(docRef);
+    }
+    return await batch.commit();
   }
 }

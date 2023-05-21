@@ -7,8 +7,12 @@ const clientsRepo = (db) => ({
     return await db.getClients();
   },
 
-  async removeClient(clientId) {
-    return await db.removeClient(clientId);
+  async updateClients(clientsData) {
+    return await db.updateClients(clientsData);
+  },
+
+  async removeClients(clientsIds) {
+    return await db.removeClients(clientsIds);
   }
 });
 

@@ -5,6 +5,8 @@ import {
   BiMessageAltAdd,
   BiMessageAltEdit,
   BiMessageAltX,
+  BiLeftArrowAlt,
+  BiRightArrowAlt
 } from 'react-icons/bi';
 import { BsArrowRightSquareFill, BsArrowLeftSquareFill } from 'react-icons/bs';
 import cn from 'classnames';
@@ -43,7 +45,7 @@ export default function Sidebar(props) {
             })}
             onClick={() => setCollapsed(!collapsed)}
           >
-            {collapsed ? <BsArrowRightSquareFill /> : <BsArrowLeftSquareFill />}
+            {collapsed ? <BiRightArrowAlt color="white" /> : <BiLeftArrowAlt color="white" />}
           </button>
         </div>
         {!collapsed && (

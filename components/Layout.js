@@ -26,7 +26,7 @@ export default function Layout(props) {
       {router.pathname !== '/' ? (
         loading ? (
           <Alert
-            type="warning"
+            color="blue"
             message="You have no permissions to this page"
           />
         ) : (
@@ -49,7 +49,7 @@ export default function Layout(props) {
               />
               {children}
             </div>
-            <footer className="site-footer">
+            <footer className="site-footer p-2">
               &copy; Stas Ponomaryov, 2023
             </footer>
           </div>
