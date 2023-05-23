@@ -23,13 +23,23 @@
     margin-right: 0.5rem;
   }
 }
+
 .active {
   color: rgb(253, 230, 138);
 }
+
 .menu {
   opacity: 0; 
   animation: opacityOn 5s normal forwards;
   animation-delay: .2s;
+}
+
+.submenu {
+  li {
+    a {
+      font-weight: 300;
+    }
+  }
 }
 
 @keyframes opacityOn {
