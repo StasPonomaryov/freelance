@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import getClients from '@/controllers/getClients';
-import useForm from '@/hooks/useAddClientForm';
+import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddClientValidationRules';
 import Alert from '@/components/Alert';
 import setClient from '@/controllers/setClient';
@@ -62,7 +62,7 @@ export default function EditClient() {
         <p className="mb-2">
           Start typing client name or description or contacts
         </p>
-        <div className="w-2/4">
+        <div className="md:w-2/4 sm:w-full">
           <ReactSearchAutocomplete
             items={clients}
             fuseOptions={{ keys: ['name', 'description', 'contacts'] }}

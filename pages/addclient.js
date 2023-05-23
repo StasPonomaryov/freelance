@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import useForm from '@/hooks/useAddClientForm';
+import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddClientValidationRules';
 import setClient from '@/controllers/setClient';
 import { useState } from 'react';

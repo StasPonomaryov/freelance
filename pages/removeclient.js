@@ -54,7 +54,7 @@ export default function RemoveClient() {
         <p className="mb-2">
           Start typing client name or description or contacts
         </p>
-        <div className="w-2/4">
+        <div className="md:w-2/4 sm:w-full">
           <ReactSearchAutocomplete
             items={clients}
             fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
