@@ -20,7 +20,7 @@ export default function EditClient() {
     setValues({
       clientName: item.name,
       clientDescription: item.description,
-      clientContacts: item.contacts
+      clientContacts: item.contacts,
     });
   };
 
@@ -28,7 +28,9 @@ export default function EditClient() {
     return (
       <>
         <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">{item.description}</span>
+        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          {item.description}
+        </span>
       </>
     );
   };
@@ -57,15 +59,19 @@ export default function EditClient() {
         Edit client
       </h1>
       <div className="container p-4">
-        <p className="mb-2">Start typing client name or description or contacts</p>
-        <ReactSearchAutocomplete
-          items={clients}
-          fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
-          onSelect={handleOnSelect}
-          autoFocus
-          formatResult={formatResult}
-          styling={{ borderRadius: '0.5rem' }}
-        />
+        <p className="mb-2">
+          Start typing client name or description or contacts
+        </p>
+        <div className="w-2/4">
+          <ReactSearchAutocomplete
+            items={clients}
+            fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
+            onSelect={handleOnSelect}
+            autoFocus
+            formatResult={formatResult}
+            styling={{ borderRadius: '0.5rem' }}
+          />
+        </div>
         {selected ? (
           <form className="mt-2 space-y-4" onSubmit={handleSubmit} noValidate>
             <div className="client-name">
