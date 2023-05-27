@@ -73,4 +73,11 @@ export class CloudDb {
     }
     return await batch.commit();
   }
+
+  async saveOrder(orderData) {
+    return await setDoc(
+      doc(this.cloudDb, this.tasks, `${orderData.id}`),
+      orderData
+    );
+  }
 }
