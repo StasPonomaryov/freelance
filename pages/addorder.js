@@ -129,9 +129,7 @@ export default function AddOrder() {
               type="text"
               onChange={handleChange}
               value={values.taskTitle || ''}
-              className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                errors.taskTitle && 'is-danger'
-              }`}
+              className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
             />
             {errors.taskTitle && (
               <p className="text-sm text-red-800">{errors.taskTitle}</p>
@@ -157,9 +155,7 @@ export default function AddOrder() {
                 value={
                   values.taskStart || new Date().toLocaleDateString('uk-UA')
                 }
-                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                  errors.taskStart && 'is-danger'
-                }`}
+                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskStart && (
                 <p className="text-sm text-red-800">{errors.taskStart}</p>
@@ -178,9 +174,7 @@ export default function AddOrder() {
                 type="date"
                 onChange={handleChange}
                 value={values.taskEnd || new Date().toLocaleDateString('uk-UA')}
-                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                  errors.taskEnd && 'is-danger'
-                }`}
+                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskEnd && (
                 <p className="text-sm text-red-800">{errors.taskEnd}</p>
@@ -201,9 +195,7 @@ export default function AddOrder() {
                 type="number"
                 onChange={handleChange}
                 value={values.taskPriceStart || ''}
-                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                  errors.taskPriceStart && 'is-danger'
-                }`}
+                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceStart && (
                 <p className="text-sm text-red-800">{errors.taskPriceStart}</p>
@@ -223,9 +215,7 @@ export default function AddOrder() {
                 type="number"
                 onChange={handleChange}
                 value={values.taskPriceEnd || ''}
-                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                  errors.taskPriceEnd && 'is-danger'
-                }`}
+                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceEnd && (
                 <p className="text-sm text-red-800">{errors.taskPriceEnd}</p>
@@ -246,9 +236,7 @@ export default function AddOrder() {
                 type="number"
                 onChange={handleChange}
                 value={values.taskHours || ''}
-                className={`w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                  errors.taskHours && 'is-danger'
-                }`}
+                className={`w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskHours && (
                 <p className="text-sm text-red-800">{errors.taskHours}</p>

@@ -74,6 +74,17 @@ export class CloudDb {
     return await batch.commit();
   }
 
+  async getOrders() {
+    let result = [];
+    const q = query(collection(this.cloudDb, this.tasks));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      result.push(doc.data());
+    });
+
+    return result;
+  }
+
   async saveOrder(orderData) {
     return await setDoc(
       doc(this.cloudDb, this.tasks, `${orderData.id}`),

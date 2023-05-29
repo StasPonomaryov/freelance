@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import TextInput from './TextInput';
 
 export default function Table(props) {
@@ -18,7 +19,16 @@ export default function Table(props) {
         {trs.map((tr, index) => (
           <tr className="tr-class" key={index}>
             {tr.tds.map((td, index) => (
-              <td key={index} className="td-class" width={td.width}>
+              <td
+                key={index}
+                className={classNames({
+                  'td-class': true,
+                  processing: tr.taskStatus === 2,
+                  done: tr.taskStatus === 1,
+                  canceled: tr.taskStatus === 0,
+                })}
+                width={td.width}
+              >
                 {td.checked ? (
                   <TextInput
                     id={tr.id}

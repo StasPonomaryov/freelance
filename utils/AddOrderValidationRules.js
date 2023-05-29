@@ -3,8 +3,8 @@ export default function validate(values) {
 
   if (!values.taskTitle) {
     errors.taskTitle = "Title field is required";
-  } else if (values.taskTitle.length < 3) {
-    errors.clientDescription = "Title must be longer than 3 characters";
+  } else if (values.taskTitle && values.taskTitle.length < 3) {
+    errors.taskTitle = "Title must be longer than 3 characters";
   }
 
   if (!values.taskStart) {
@@ -21,7 +21,7 @@ export default function validate(values) {
     errors.taskPriceEnd = "Price field contains non-numeric values";
   }
 
-  if (values.taskHours && !/[^\d\.]/.test(values.taskHours)) {
+  if (values.taskHours && /[^\d\.]/.test(values.taskHours)) {
     errors.taskHours = "Hours field contains non-numeric values";
   }
 

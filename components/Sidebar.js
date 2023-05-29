@@ -9,7 +9,7 @@ import {
   BiRightArrowAlt
 } from 'react-icons/bi';
 import { BsArrowRightSquareFill, BsArrowLeftSquareFill } from 'react-icons/bs';
-import cn from 'classnames';
+import classnames from 'classnames';
 import MenuItem from './MenuItem';
 import styles from './styles/aside.module.scss';
 import classNames from 'classnames';
@@ -27,19 +27,19 @@ export default function Sidebar(props) {
     })}
     >
       <div
-        className={cn({
+        className={classnames({
           'flex flex-col justify-between': true,
         })}
       >
         <div
-          className={cn({
+          className={classnames({
             'flex items-end': true,
             'p-4 justify-end': !collapsed,
             'py-4 justify-end': collapsed,
           })}
         >
           <button
-            className={cn({
+            className={classnames({
               'grid place-content-center ': true,
               'w-10 h-10 rounded-full ': true,
             })}
