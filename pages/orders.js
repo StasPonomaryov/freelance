@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Alert from '@/components/Alert';
 import Table from '@/components/Table';
 import Checkbox from '@/components/Checkbox';
 import Pagination from '@/components/Pagination';
 import ButtonGroup from '@/components/ButtonGroup';
-import { BiEdit, BiRefresh, BiTrash } from 'react-icons/bi';
+import {
+  BiEdit,
+  BiRefresh,
+  BiTrash,
+  BiCaretDown,
+  BiCaretUp,
+} from 'react-icons/bi';
 import getTasks from '@/controllers/getTasks';
 import { paginate } from '@/utils/Paginate';
 
@@ -15,6 +21,7 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [checkedOrders, setCheckedOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sorted, setSorted] = useState({ key: 'start', direction: 'DESC' });
 
   const actionButtons = [
     {
@@ -36,6 +43,15 @@ export default function Orders() {
       active: true,
     },
   ];
+  const tableFields = {
+    text: 'Description',
+    start: 'Date start',
+    end: 'Date end',
+    title: 'Title',
+    priceStart: 'Price start',
+    priceEnd: 'Price end',
+    status: 'Status',
+  };
   const pageSize = 10;
   const paginatedPosts = paginate(orders, currentPage, pageSize);
   const isChecked = (id) => {
@@ -48,7 +64,29 @@ export default function Orders() {
       1: 'done',
       2: 'processing',
     }[status];
-  }
+  };
+
+  const getSortedTh = (field) => {
+    if (field === sorted.key) {
+      if (sorted.direction === 'ASC') {
+        console.log('>>>ASC');
+        return (
+          <span>
+            {tableFields[field]}
+            <BiCaretDown />
+          </span>
+        );
+      }
+      console.log('>>>DESC');
+      return (
+        <span className="flex flex-center">
+          {tableFields[field]}
+          <BiCaretUp />
+        </span>
+      );
+    }
+    return tableFields[field];
+  };
 
   function handleEditButton() {
     console.log('>>>EDIT CLICK');
@@ -78,12 +116,31 @@ export default function Orders() {
     setCurrentPage(page);
   }
 
+  function onFieldClick(e) {
+    const title = e.target.getAttribute('data-title');
+    const field = Object.keys(tableFields).find(
+      (key) => tableFields[key] === title
+    );
+
+    if (sorted.key === field) {
+      if (sorted.direction === 'DESC') {
+        setSorted({ key: field, direction: 'ASC' });
+      }
+    }
+    setSorted({ key: field, direction: 'ASC' });
+  }
+
   useEffect(() => {
     getTasks().then((data) => {
+      console.log('>>>SORTING', sorted.key, sorted.direction);
+      if (sorted.direction === 'ASC') {
+        data.sort((a, b) => new Date(a[sorted.key]) - new Date(b[sorted.key]));
+      } else {
+        data.sort((a, b) => new Date(b[sorted.key]) - new Date(a[sorted.key]));
+      }
       setOrders(data);
-      console.log(data);
     });
-  }, []);
+  }, [sorted.direction, sorted.key]);
 
   return (
     <main className="orders bg-amber-200 dark:bg-gray-800 p-3">
@@ -98,7 +155,17 @@ export default function Orders() {
           >
             <Table
               onChangeInput={handleTableChange}
-              ths={['Title', 'Description', 'Price start', 'Price end', 'Date start', 'Date end', 'Check']}
+              onFieldClick={onFieldClick}
+              ths={[
+                getSortedTh('title'),
+                getSortedTh('text'),
+                getSortedTh('priceStart'),
+                getSortedTh('priceEnd'),
+                getSortedTh('start'),
+                getSortedTh('end'),
+                getSortedTh('status'),
+                'Check',
+              ]}
               trs={paginatedPosts.map((order) => {
                 return {
                   id: order.id,
@@ -111,41 +178,45 @@ export default function Orders() {
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: <ReactMarkdown remarkPlugins={[remarkGfm]}>{order.text}</ReactMarkdown>,
+                      cell: (
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {order.text}
+                        </ReactMarkdown>
+                      ),
                       label: 'task',
                       width: '40%',
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: (order.priceStart ? Number(order.priceStart) : 0),
+                      cell: order.priceStart ? Number(order.priceStart) : 0,
                       label: 'priceStart',
                       required: true,
                       width: '5%',
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: (order.priceEnd ? Number(order.priceEnd) : 0),
+                      cell: order.priceEnd ? Number(order.priceEnd) : 0,
                       label: 'priceEnd',
                       required: true,
                       width: '5%',
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: (order.start || '-'),
+                      cell: order.start || '-',
                       label: 'dateStart',
                       required: true,
                       width: '5%',
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: (order.end || '-'),
+                      cell: order.end || '-',
                       label: 'dateEnd',
                       required: true,
                       width: '5%',
                       checked: isChecked(order.id) && editingMode,
                     },
                     {
-                      cell: (order.status ? parseOrderStatus(order.status) : '-'),
+                      cell: parseOrderStatus(order.status),
                       label: 'status',
                       required: true,
                       width: '10%',
@@ -163,7 +234,7 @@ export default function Orders() {
                       width: '5%',
                     },
                   ],
-                  taskStatus: order.status || ''
+                  taskStatus: order.status,
                 };
               })}
             />
@@ -185,7 +256,7 @@ export default function Orders() {
           <>
             <LoadingSpinner />
             {!orders.length && (
-              <Alert color="orange" message="No clients found" />
+              <Alert warning={true} message="No clients found" />
             )}
           </>
         )}

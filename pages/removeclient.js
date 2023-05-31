@@ -65,7 +65,7 @@ export default function RemoveClient() {
           />
           {showAlert ? (
             <div className="mt-2">
-              <Alert color="blue" message="Client removed!" />
+              <Alert info={true} message="Client removed!" />
             </div>
           ) : null}
         </div>

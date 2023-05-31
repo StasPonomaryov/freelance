@@ -24,16 +24,18 @@ export default function Layout(props) {
   return (
     <>
       {router.pathname !== '/' ? (
-        loading ? (
-          <Alert
-            color="blue"
-            message="You have no permissions to this page"
-          />
-        ) : (
-          <div className={`${inter.className} grid`}>
-            <header className="site-header bg-white dark:bg-gray-950">
-              <Navbar authUser={authUser} signOut={logOut} />
-            </header>
+        <div className={`${inter.className} grid`}>
+          <header className="site-header bg-white dark:bg-gray-950">
+            <Navbar authUser={authUser} signOut={logOut} />
+          </header>
+          {loading ? (
+            <div className="h-screen">
+              <Alert
+                warning={true}
+                message="You have no permissions to this page"
+              />
+            </div>
+          ) : (
             <div
               className={classNames({
                 'grid min-h-screen': true,
@@ -49,11 +51,11 @@ export default function Layout(props) {
               />
               {children}
             </div>
-            <footer className="site-footer p-2">
-              &copy; Stas Ponomaryov, 2023
-            </footer>
-          </div>
-        )
+          )}
+          <footer className="site-footer p-2">
+            &copy; Stas Ponomaryov, 2023
+          </footer>
+        </div>
       ) : (
         children
       )}

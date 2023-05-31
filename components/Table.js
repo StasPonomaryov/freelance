@@ -2,14 +2,19 @@ import classNames from 'classnames';
 import TextInput from './TextInput';
 
 export default function Table(props) {
-  const { ths, trs, onChangeInput } = props;
+  const { ths, trs, onChangeInput, onFieldClick } = props;
   console.log('>>>TRS', trs);
   return (
     <table className="border-separate border-spacing-y-2 text-sm">
       <thead className="text-black dark:text-white hidden md:table-header-group">
         <tr>
           {ths.map((th, index) => (
-            <th key={index} className="p-3 text-left">
+            <th
+              key={index}
+              onClick={(e) => onFieldClick(e)}
+              data-title={th}
+              className="p-3 text-left cursor-pointer"
+            >
               {th}
             </th>
           ))}

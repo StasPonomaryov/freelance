@@ -196,7 +196,7 @@ export default function Clients() {
           <>
             <LoadingSpinner />
             {!clients.length && (
-              <Alert color="orange" message="No clients found" />
+              <Alert warning={true} message="No clients found" />
             )}
           </>
         )}

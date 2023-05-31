@@ -44,7 +44,7 @@ export default function EditClient() {
     };
     setClient(clientData)
       .then((r) => setSaved(true))
-      .catch((e) => <Alert color="red" message={e} />);
+      .catch((e) => <Alert danger={true} message={e} />);
   }
 
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function EditClient() {
                 <p className="text-sm text-red-800">{errors.clientContacts}</p>
               )}
             </div>
-            {saved ? <Alert color="blue" message="Client updated!" /> : ''}
+            {saved ? <Alert ino={true} message="Client updated!" /> : ''}
             <button
               type="submit"
               className="text-white bg-blue-600

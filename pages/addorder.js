@@ -49,6 +49,7 @@ export default function AddOrder() {
       title: values.taskTitle,
       text: taskText || '-',
       start: values.taskStart,
+      priceEnd: values.taskPriceEnd,
       status: taskStatus.filter((i) => i.checked === true)[0].id,
       ...(values.taskEnd && { end: values.taskEnd }),
       ...(values.taskPriceStart && { priceStart: values.taskPriceStart }),
@@ -56,7 +57,7 @@ export default function AddOrder() {
     console.log('>>>ORDER DATA', orderData);
     setTask(orderData)
       .then((r) => setSaved(true))
-      .catch((e) => <Alert color="red" message={e} />);
+      .catch((e) => <Alert danger={true} message={e} />);
   }
 
   const formatResult = (item) => {
@@ -194,7 +195,7 @@ export default function AddOrder() {
                 name="taskPriceStart"
                 type="number"
                 onChange={handleChange}
-                value={values.taskPriceStart || ''}
+                value={values.taskPriceStart || 0}
                 className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceStart && (
@@ -214,7 +215,7 @@ export default function AddOrder() {
                 required
                 type="number"
                 onChange={handleChange}
-                value={values.taskPriceEnd || ''}
+                value={values.taskPriceEnd || 0}
                 className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceEnd && (
@@ -261,7 +262,7 @@ export default function AddOrder() {
               ))}
             </div>
           </div>
-          {saved ? <Alert color="blue" message="Order added!" /> : ''}
+          {saved ? <Alert info={true} message="Order added!" /> : ''}
           <button
             type="submit"
             className="text-white bg-blue-600
