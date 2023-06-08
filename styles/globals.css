@@ -46,6 +46,10 @@ body {
   @apply bg-amber-400 dark:bg-gray-700
 }
 
+.checked {
+  @apply bg-amber-200 text-gray-900
+}
+
 @media (max-width: 560px) {
   .grid-cols-sidebar-collapsed {
     grid-template-columns: unset !important;

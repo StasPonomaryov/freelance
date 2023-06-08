@@ -1,35 +1,28 @@
-import dynamic from 'next/dynamic';
-import { nanoid } from 'nanoid';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import dynamic from 'next/dynamic';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddOrderValidationRules';
-import { useState, useEffect } from 'react';
-import Alert from '@/components/Alert';
-import getClients from '@/controllers/getClients';
-import RadioButton from '@/components/RadioButton';
+import getTasks from '@/controllers/getTasks';
+import getTask from '@/controllers/getTask';
 import setTask from '@/controllers/setTask';
+import Alert from '@/components/Alert';
+import RadioButton from '@/components/RadioButton';
+import { taskStatuses, toggleStatus } from './addorder';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { increment } from 'firebase/firestore';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
   { ssr: false }
 );
 
-export const taskStatuses = [
-  { id: 0, name: 'canceled' },
-  { id: 1, name: 'done' },
-  { id: 2, name: 'processing', checked: true },
-];
-
-export const toggleStatus = (taskStatuses, id, checked) => {
-  return taskStatuses.map((status) =>
-    status.id === id ? { ...status, checked } : { ...status, checked: false }
-  );
-};
-
-export default function AddOrder() {
-  const [clients, setClients] = useState([]);
+export default function EditOrder() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [orders, setOrders] = useState([]);
   const [clientSelected, setClientSelected] = useState(null);
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(
     submitCallback,
@@ -38,11 +31,12 @@ export default function AddOrder() {
   const [taskText, setTaskText] = useState('**Task description**');
   const [taskStatus, setTaskStatus] = useState(taskStatuses);
   const [saved, setSaved] = useState(false);
+  console.log('>>>ID', id);
 
   function submitCallback() {
     console.log('>>>SUBMITTING ORDER');
     const orderData = {
-      id: nanoid(10),
+      id,
       clientId: clientSelected,
       title: values.taskTitle,
       text: taskText || '-',
@@ -51,7 +45,7 @@ export default function AddOrder() {
       status: taskStatus.filter((i) => i.checked === true)[0].id,
       ...(values.taskEnd && { end: values.taskEnd }),
       ...(values.taskPriceStart && { priceStart: values.taskPriceStart }),
-      ...values.taskHours && { hours: taskHours }
+      ...values.taskHours && { hours: values.taskHours }
     };
     console.log('>>>ORDER DATA', orderData);
     setTask(orderData)
@@ -59,12 +53,16 @@ export default function AddOrder() {
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
+  const handleOnSelect = (item) => {
+    setClientSelected(item.id);
+  };
+
   const formatResult = (item) => {
     return (
       <>
-        <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
+        <span style={{ display: 'block', textAlign: 'left' }}>{item.title}</span>
         <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {item.description}
+          {item.start || increment.end}
         </span>
       </>
     );
@@ -75,42 +73,56 @@ export default function AddOrder() {
     setTaskStatus((taskStatus) => toggleStatus(taskStatus, id, checked));
   }
 
-  const handleOnSelect = (item) => {
-    setClientSelected(item.id);
-  };
-
   useEffect(() => {
-    getClients().then((data) => {
-      setClients(data);
-    });
-  }, [setValues, values]);
+    if (id) {
+      getTask(id).then((order) => {
+        setClientSelected(order.clientId);
+        setTaskText(order.text);
+        setTaskStatus((taskStatus) => toggleStatus(taskStatus, order.status, true));
+        setValues({
+          taskTitle: order.title,
+          taskStart: order.start,
+          ...order.end && { taskEnd: order.end },
+          ...order.priceStart && { taskPriceStart: order.priceStart },
+          ...order.priceEnd && { taskPriceEnd: order.priceEnd },
+          ...order.hours && { taskHours: order.hours }
+        });
+      })
+    } else {
+      getTasks().then((data) => {
+        setOrders(data);
+      });
+    }
+  }, [id, setValues]);
 
   return (
-    <main className="add-client bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="edit-order bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
-        Add order
+        Edit order
       </h1>
       <div className="container p-4">
         <form className="mt-2 space-y-4" onSubmit={handleSubmit} noValidate>
-          <div className="client-name md:w-2/4 sm:w-full">
-            <label
-              htmlFor="raskClient"
-              className="block mb-3 text-sm font-semibold text-gray-500"
-            >
-              Client<span className="required">*</span>
-            </label>
-            <ReactSearchAutocomplete
-              items={clients}
-              fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
-              onSelect={handleOnSelect}
-              autoFocus
-              formatResult={formatResult}
-              styling={{ borderRadius: '0.5rem' }}
-            />
-            <p className="text-sm text-gray-500">
-              Start typing client name or description or contacts
-            </p>
-          </div>
+          {typeof id === 'undefined' && (
+              <div className="client-name md:w-2/4 sm:w-full">
+                <label
+                  htmlFor="raskClient"
+                  className="block mb-3 text-sm font-semibold text-gray-500"
+                >
+                  Order<span className="required">*</span>
+                </label>
+                <ReactSearchAutocomplete
+                  items={orders}
+                  fuseOptions={{ keys: ['title', 'start', 'end'] }}
+                  onSelect={handleOnSelect}
+                  autoFocus
+                  formatResult={formatResult}
+                  styling={{ borderRadius: '0.5rem' }}
+                />
+                <p className="text-sm text-gray-500">
+                  Start typing client name or description or contacts
+                </p>
+              </div>
+            )}
           <div className="task-title">
             <label
               htmlFor="taskTitle"
@@ -257,13 +269,13 @@ export default function AddOrder() {
               ))}
             </div>
           </div>
-          {saved ? <Alert info={true} message="Order added!" /> : ''}
+          {saved ? <Alert info={true} message="Order updated!" /> : ''}
           <button
             type="submit"
             className="text-white bg-blue-600
               hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:ring-blue-700 dark:focus:ring-blue-800"
           >
-            Add
+            Update
           </button>
         </form>
       </div>

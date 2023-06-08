@@ -5,6 +5,10 @@ const tasksRepo = (db) => ({
 
   async getTasks() {
     return await db.getOrders();
+  },
+
+  async getTask(id) {
+    return await db.getOrder(id);
   }
 });
 

@@ -74,6 +74,20 @@ export class CloudDb {
     return await batch.commit();
   }
 
+  async getOrder(orderId) {
+    let result = {};
+    const docRef = doc(this.cloudDb, this.tasks, `${orderId}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      result = docSnap.data();
+      console.log('>>>DOCUMENT', docSnap.data());
+    } else {
+      console.log('>>>NO DOCUMENT FOUND');
+    }
+
+    return result;
+  }
+
   async getOrders() {
     let result = [];
     const q = query(collection(this.cloudDb, this.tasks));
