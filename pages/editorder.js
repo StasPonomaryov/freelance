@@ -13,16 +13,18 @@ import { taskStatuses, toggleStatus } from './addorder';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import { increment } from 'firebase/firestore';
+import getClients from '@/controllers/getClients';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
   { ssr: false }
 );
 
-export default function EditOrder() {
+export default function EditOrder({ orders, clients }) {
   const router = useRouter();
   const { orderId } = router.query;
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
+  // const [clients, setClients] = useState([]);
   const [selected, setSelected] = useState(null);
   const [clientSelected, setClientSelected] = useState(null);
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(
@@ -36,7 +38,7 @@ export default function EditOrder() {
   function submitCallback() {
     const orderData = {
       id: orderId || selected,
-      clientId: clientSelected,
+      clientId: values.client,
       title: values.taskTitle,
       text: taskText || '-',
       start: values.taskStart,
@@ -55,7 +57,7 @@ export default function EditOrder() {
     console.log('>>>ITEM', item);
     setSelected(item);
     setSelected(item.id);
-    setClientSelected(item.clientId);
+    // setClientSelected(item.clientId);
     setTaskText(item.text);
     setTaskStatus((taskStatus) => toggleStatus(taskStatus, item.status, true));
     setValues({
@@ -68,6 +70,14 @@ export default function EditOrder() {
     });
   };
 
+  const handleOnSelectClient = (item) => {
+    console.log('>>>CLIENT', item);
+    setValues({
+      ...values,
+      client: item.id
+    });
+  }
+
   const formatResult = (item) => {
     return (
       <>
@@ -76,6 +86,17 @@ export default function EditOrder() {
         </span>
         <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
           {item.start}
+        </span>
+      </>
+    );
+  };
+
+  const formatResultClients = (item) => {
+    return (
+      <>
+        <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
+        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+          {item.description}
         </span>
       </>
     );
@@ -103,12 +124,10 @@ export default function EditOrder() {
           ...(order.hours && { taskHours: order.hours }),
         });
       });
-    } else {
-      getTasks().then((data) => {
-        setOrders(data);
-      });
     }
   }, [orderId, setValues]);
+
+  console.log('>>>Clients', clients);
 
   return (
     <main className="edit-order bg-amber-200 dark:bg-gray-800 p-3">
@@ -159,6 +178,26 @@ export default function EditOrder() {
             {errors.taskTitle && (
               <p className="text-sm text-red-800">{errors.taskTitle}</p>
             )}
+          </div>
+          <div className="task-client md:w-2/4 sm:w-full">
+            <label
+              htmlFor="taskClient"
+              className="block mb-3 text-sm font-semibold text-gray-500"
+            >
+              Client<span className="required">*</span>
+            </label>
+            <ReactSearchAutocomplete
+              items={clients}
+              fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
+              onSelect={handleOnSelectClient}
+              autoFocus
+              formatResult={formatResultClients}
+              resultStringKeyName="name"
+              styling={{ borderRadius: '0.5rem', zIndex: 3 }}
+            />
+            <p className="text-sm text-gray-500">
+              Start typing client name or description or contacts
+            </p>
           </div>
           <div className="task-description">
             <MDEditor
@@ -303,4 +342,16 @@ export default function EditOrder() {
       </div>
     </main>
   );
+}
+
+export async function getServerSideProps() {
+  const orders = await getTasks();
+  const clients = await getClients();
+
+  return {
+    props: {
+      orders,
+      clients
+    }
+  }
 }
