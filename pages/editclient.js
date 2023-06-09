@@ -69,7 +69,7 @@ export default function EditClient() {
             onSelect={handleOnSelect}
             autoFocus
             formatResult={formatResult}
-            styling={{ borderRadius: '0.5rem' }}
+            styling={{ borderRadius: '0.5rem', zIndex: 3 }}
           />
         </div>
         {selected ? (

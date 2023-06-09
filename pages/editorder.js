@@ -21,8 +21,9 @@ const MDEditor = dynamic(
 
 export default function EditOrder() {
   const router = useRouter();
-  const { id } = router.query;
+  const { orderId } = router.query;
   const [orders, setOrders] = useState([]);
+  const [selected, setSelected] = useState(null);
   const [clientSelected, setClientSelected] = useState(null);
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(
     submitCallback,
@@ -31,12 +32,10 @@ export default function EditOrder() {
   const [taskText, setTaskText] = useState('**Task description**');
   const [taskStatus, setTaskStatus] = useState(taskStatuses);
   const [saved, setSaved] = useState(false);
-  console.log('>>>ID', id);
 
   function submitCallback() {
-    console.log('>>>SUBMITTING ORDER');
     const orderData = {
-      id,
+      id: orderId || selected,
       clientId: clientSelected,
       title: values.taskTitle,
       text: taskText || '-',
@@ -45,24 +44,38 @@ export default function EditOrder() {
       status: taskStatus.filter((i) => i.checked === true)[0].id,
       ...(values.taskEnd && { end: values.taskEnd }),
       ...(values.taskPriceStart && { priceStart: values.taskPriceStart }),
-      ...values.taskHours && { hours: values.taskHours }
+      ...(values.taskHours && { hours: values.taskHours }),
     };
-    console.log('>>>ORDER DATA', orderData);
     setTask(orderData)
       .then((r) => setSaved(true))
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
   const handleOnSelect = (item) => {
-    setClientSelected(item.id);
+    console.log('>>>ITEM', item);
+    setSelected(item);
+    setSelected(item.id);
+    setClientSelected(item.clientId);
+    setTaskText(item.text);
+    setTaskStatus((taskStatus) => toggleStatus(taskStatus, item.status, true));
+    setValues({
+      taskTitle: item.title,
+      taskStart: item.start,
+      ...(item.end && { taskEnd: item.end }),
+      ...(item.priceStart && { taskPriceStart: item.priceStart }),
+      ...(item.priceEnd && { taskPriceEnd: item.priceEnd }),
+      ...(item.hours && { taskHours: item.hours }),
+    });
   };
 
   const formatResult = (item) => {
     return (
       <>
-        <span style={{ display: 'block', textAlign: 'left' }}>{item.title}</span>
+        <span style={{ display: 'block', textAlign: 'left' }}>
+          {item.title}
+        </span>
         <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {item.start || increment.end}
+          {item.start}
         </span>
       </>
     );
@@ -74,26 +87,28 @@ export default function EditOrder() {
   }
 
   useEffect(() => {
-    if (id) {
-      getTask(id).then((order) => {
+    if (orderId) {
+      getTask(orderId).then((order) => {
         setClientSelected(order.clientId);
         setTaskText(order.text);
-        setTaskStatus((taskStatus) => toggleStatus(taskStatus, order.status, true));
+        setTaskStatus((taskStatus) =>
+          toggleStatus(taskStatus, order.status, true)
+        );
         setValues({
           taskTitle: order.title,
           taskStart: order.start,
-          ...order.end && { taskEnd: order.end },
-          ...order.priceStart && { taskPriceStart: order.priceStart },
-          ...order.priceEnd && { taskPriceEnd: order.priceEnd },
-          ...order.hours && { taskHours: order.hours }
+          ...(order.end && { taskEnd: order.end }),
+          ...(order.priceStart && { taskPriceStart: order.priceStart }),
+          ...(order.priceEnd && { taskPriceEnd: order.priceEnd }),
+          ...(order.hours && { taskHours: order.hours }),
         });
-      })
+      });
     } else {
       getTasks().then((data) => {
         setOrders(data);
       });
     }
-  }, [id, setValues]);
+  }, [orderId, setValues]);
 
   return (
     <main className="edit-order bg-amber-200 dark:bg-gray-800 p-3">
@@ -101,28 +116,30 @@ export default function EditOrder() {
         Edit order
       </h1>
       <div className="container p-4">
+        {typeof orderId === 'undefined' && (
+          <div className="order md:w-2/4 sm:w-full">
+            <label
+              htmlFor="taskOrder"
+              className="block mb-3 text-sm font-semibold text-gray-500"
+            >
+              Order<span className="required">*</span>
+            </label>
+            <ReactSearchAutocomplete
+              items={orders}
+              fuseOptions={{ keys: ['title', 'start', 'id'] }}
+              onSelect={handleOnSelect}
+              autoFocus
+              formatResult={formatResult}
+              resultStringKeyName="title"
+              styling={{ borderRadius: '0.5rem', zIndex: 3 }}
+            />
+            <p className="text-sm text-gray-500">
+              Start typing client name or description or contacts
+            </p>
+          </div>
+        )}
+        {selected || orderId ? (
         <form className="mt-2 space-y-4" onSubmit={handleSubmit} noValidate>
-          {typeof id === 'undefined' && (
-              <div className="client-name md:w-2/4 sm:w-full">
-                <label
-                  htmlFor="raskClient"
-                  className="block mb-3 text-sm font-semibold text-gray-500"
-                >
-                  Order<span className="required">*</span>
-                </label>
-                <ReactSearchAutocomplete
-                  items={orders}
-                  fuseOptions={{ keys: ['title', 'start', 'end'] }}
-                  onSelect={handleOnSelect}
-                  autoFocus
-                  formatResult={formatResult}
-                  styling={{ borderRadius: '0.5rem' }}
-                />
-                <p className="text-sm text-gray-500">
-                  Start typing client name or description or contacts
-                </p>
-              </div>
-            )}
           <div className="task-title">
             <label
               htmlFor="taskTitle"
@@ -144,7 +161,11 @@ export default function EditOrder() {
             )}
           </div>
           <div className="task-description">
-            <MDEditor value={taskText} onChange={setTaskText} />
+            <MDEditor
+              value={taskText}
+              onChange={setTaskText}
+              style={{ zIndex: 2 }}
+            />
           </div>
           <div className="flex flex-row items-center w-2/4">
             <div className="task-date-start w-full mr-1">
@@ -278,6 +299,7 @@ export default function EditOrder() {
             Update
           </button>
         </form>
+        ) : null}
       </div>
     </main>
   );

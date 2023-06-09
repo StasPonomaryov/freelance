@@ -62,7 +62,7 @@ export default function Orders({ orders }) {
 
   function handleEditButton() {
     console.log('>>>EDIT CLICKED', checkedRow);
-    router.push(`/editorder?id=${checkedRow}`);
+    router.push(`/editorder?orderId=${checkedRow}`);
   }
 
   function handleRemoveButton() {
