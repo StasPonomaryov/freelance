@@ -51,11 +51,18 @@ export default function AddOrder() {
       status: taskStatus.filter((i) => i.checked === true)[0].id,
       ...(values.taskEnd && { end: values.taskEnd }),
       ...(values.taskPriceStart && { priceStart: values.taskPriceStart }),
-      ...values.taskHours && { hours: taskHours }
+      ...values.taskHours && { hours: values.taskHours }
     };
     console.log('>>>ORDER DATA', orderData);
     setTask(orderData)
-      .then((r) => setSaved(true))
+      .then((r) => {
+        setValues({});
+        setClientSelected(null);
+        setTaskText('**Task description**');
+        setTaskStatus(taskStatuses);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 5000);
+      })
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
@@ -190,7 +197,7 @@ export default function AddOrder() {
                 name="taskPriceStart"
                 type="number"
                 onChange={handleChange}
-                value={values.taskPriceStart || 0}
+                value={values.taskPriceStart || ''}
                 className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceStart && (
@@ -210,7 +217,7 @@ export default function AddOrder() {
                 required
                 type="number"
                 onChange={handleChange}
-                value={values.taskPriceEnd || 0}
+                value={values.taskPriceEnd || ''}
                 className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
               />
               {errors.taskPriceEnd && (

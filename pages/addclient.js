@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Alert from '@/components/Alert';
 
 export default function AddClient() {
-  const { values, errors, handleChange, handleSubmit } = useForm(
+  const { values, errors, handleChange, handleSubmit, setValues } = useForm(
     submitCallback,
     validate
   );
@@ -22,7 +22,11 @@ export default function AddClient() {
     };
     console.log('>>>SUBMITTING DATA', clientData);
     setClient(clientData)
-      .then((r) => setSaved(true))
+      .then((r) => {
+        setValues({});
+        setSaved(true);
+        setTimeout(() => setSaved(false), 5000);
+      })
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
