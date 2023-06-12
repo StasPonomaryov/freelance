@@ -9,7 +9,7 @@ import ButtonGroup from '@/components/ButtonGroup';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/Modal';
 import { paginate } from '@/utils/Paginate';
-import removeClients from '@/controllers/removeClient';
+import removeClients from '@/controllers/removeClients';
 import updateClients from '@/controllers/updateClients';
 
 export default function Clients() {
@@ -193,12 +193,7 @@ export default function Clients() {
             </div>
           </form>
         ) : (
-          <>
-            <LoadingSpinner />
-            {!clients.length && (
-              <Alert warning={true} message="No clients found" />
-            )}
-          </>
+          <Alert warning={true} message="No clients found" />
         )}
 
         {showModalRemove && (

@@ -12,7 +12,6 @@ import RadioButton from '@/components/RadioButton';
 import { taskStatuses, toggleStatus } from './addorder';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-import { increment } from 'firebase/firestore';
 import getClients from '@/controllers/getClients';
 
 const MDEditor = dynamic(
@@ -23,8 +22,6 @@ const MDEditor = dynamic(
 export default function EditOrder({ orders, clients }) {
   const router = useRouter();
   const { orderId } = router.query;
-  // const [orders, setOrders] = useState([]);
-  // const [clients, setClients] = useState([]);
   const [selected, setSelected] = useState(null);
   const [clientSelected, setClientSelected] = useState(null);
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(
@@ -127,8 +124,6 @@ export default function EditOrder({ orders, clients }) {
     }
   }, [orderId, setValues]);
 
-  console.log('>>>Clients', clients);
-
   return (
     <main className="edit-order bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
@@ -153,7 +148,7 @@ export default function EditOrder({ orders, clients }) {
               styling={{ borderRadius: '0.5rem', zIndex: 3 }}
             />
             <p className="text-sm text-gray-500">
-              Start typing client name or description or contacts
+              Start typing order title or start time
             </p>
           </div>
         )}

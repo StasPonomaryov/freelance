@@ -9,6 +9,10 @@ const tasksRepo = (db) => ({
 
   async getTask(id) {
     return await db.getOrder(id);
+  },
+
+  async removeTask(id) {
+    return await db.removeOrder(id);
   }
 });
 

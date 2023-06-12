@@ -3,7 +3,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import getClients from '@/controllers/getClients';
 import Alert from '@/components/Alert';
 import Modal from '@/components/Modal';
-import removeClients from '@/controllers/removeClient';
+import removeClients from '@/controllers/removeClients';
 
 export default function RemoveClient() {
   const [clients, setClients] = useState([]);

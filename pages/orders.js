@@ -67,6 +67,7 @@ export default function Orders({ orders }) {
 
   function handleRemoveButton() {
     console.log('>>>REMOVE CLICKED');
+    router.push(`/removeorder?orderId=${checkedRow}`);
   }
 
   function onPageChange(page) {
@@ -148,12 +149,7 @@ export default function Orders({ orders }) {
             </div>
           </div>
         ) : (
-          <>
-            <LoadingSpinner />
-            {!orders.length && (
-              <Alert warning={true} message="No clients found" />
-            )}
-          </>
+          <Alert warning={true} message="No orders found" />
         )}
       </div>
     </main>

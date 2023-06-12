@@ -105,4 +105,8 @@ export class CloudDb {
       orderData
     );
   }
+
+  async removeOrder(orderId) {
+    return await deleteDoc(doc(this.cloudDb, this.tasks, `${orderId}`))
+  }
 }
