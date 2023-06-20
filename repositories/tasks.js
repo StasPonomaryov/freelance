@@ -13,7 +13,19 @@ const tasksRepo = (db) => ({
 
   async removeTask(id) {
     return await db.removeOrder(id);
-  }
+  },
+
+  async getTasksByYear(year) {
+    const allOrders = await db.getOrders();
+    const filtered = allOrders.filter((o) => {
+      const date = new Date(o.end);
+      const y = new Date(year);
+
+      return date.getYear() === y.getYear();
+    });
+
+    return filtered;
+  },
 });
 
 export default tasksRepo;

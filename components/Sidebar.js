@@ -20,7 +20,7 @@ export default function Sidebar(props) {
   return (
     <aside className={classNames({
       "site-sidebar bg-purple-600 dark:bg-gray-900 py-3 px-8": true,
-      "fixed md:static md:translate-x-0 h-screen": true,
+      "fixed md:static md:translate-x-0 h-full": true,
       "w-[300px]": !collapsed,
       "w-16": collapsed,
       "md:-translate-x-full": !shown,
