@@ -1,6 +1,11 @@
 import getClients from '@/controllers/getClients';
 import getTasksByYear from '@/controllers/getTasksByYear';
-import { groupBy, getPaidOrders, getFinishedOrdersByYear, getPaidOrdersByYear } from '@/utils';
+import {
+  groupBy,
+  getPaidOrders,
+  getFinishedOrdersByYear,
+  getPaidOrdersByYear,
+} from '@/utils';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -113,38 +118,26 @@ export default function Admin({ clients, filteredOrders }) {
   console.log(getPaidOrdersByYear(filteredOrders));
 
   return (
-    <main className="site-content bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="content bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Analytics
       </h1>
-      <div className="container p-4">
-        <div className="flex flex-row items-center w-full lg:w-2/4">
-          <div className="top-clients-income w-full mr-1">
-            <h2>Top clients (income)</h2>
-            <Bar data={dataClientsIncome} height={300} options={options} />
-          </div>
-          <div className="top-clients-tasks w-full mr-1">
-            <h2>Top clients (orders)</h2>
-            <Bar
-              data={dataClientsOrders}
-              height={300}
-              options={clientsTasksOptions}
-            />
-          </div>
+      <div className="container flex flex-wrap p-4">
+        <div className="top-clients-income lg:w-1/4">
+          <h2>Top clients (income)</h2>
+          <Bar data={dataClientsIncome} options={options} />
         </div>
-        <div className="flex flex-row items-center w-full lg:w-2/4">
-          <div className="top-clients-income w-full mr-1">
-            <h2>Income by 2023</h2>
-            <Bar data={dataYearIncome} height={300} options={options} />
-          </div>
-          <div className="top-clients-tasks w-full mr-1">
-            <h2>Orders by 2023</h2>
-            <Bar
-              data={dataYearOrders}
-              height={300}
-              options={clientsTasksOptions}
-            />
-          </div>
+        <div className="top-clients-tasks lg:w-1/4">
+          <h2>Top clients (orders)</h2>
+          <Bar data={dataClientsOrders} options={clientsTasksOptions} />
+        </div>
+        <div className="top-clients-income lg:w-1/4">
+          <h2>Income by 2023</h2>
+          <Bar data={dataYearIncome} options={options} />
+        </div>
+        <div className="top-clients-tasks lg:w-1/4">
+          <h2>Orders by 2023</h2>
+          <Bar data={dataYearOrders} options={clientsTasksOptions} />
         </div>
       </div>
     </main>

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Inter } from 'next/font/google';
 import { useAuth } from '../context/AuthUserContext';
-import classNames from 'classnames';
 import Alert from './Alert';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
@@ -24,8 +23,8 @@ export default function Layout(props) {
   return (
     <>
       {router.pathname !== '/' ? (
-        <div className={`${inter.className} grid`}>
-          <header className="site-header bg-white dark:bg-gray-950">
+        <div className={`${inter.className} wrapper bg-amber-200 dark:bg-gray-800 min-h-screen`}>
+          <header className={'site-header p-2'}>
             <Navbar authUser={authUser} signOut={logOut} />
           </header>
           {loading ? (
@@ -36,24 +35,19 @@ export default function Layout(props) {
               />
             </div>
           ) : (
-            <div
-              className={classNames({
-                'grid min-h-screen': true,
-                'grid-cols-sidebar': !collapsed,
-                'grid-cols-sidebar-collapsed': collapsed,
-                'transition-[grid-template-columns] duration-300 ease-in-out': true,
-              })}
-            >
+            <>
               <Sidebar
                 collapsed={collapsed}
                 setCollapsed={() => setSidebarCollapsed((prev) => !prev)}
                 shown={showSidebar}
               />
               {children}
-            </div>
+            </>
           )}
-          <footer className="site-footer p-2">
-            &copy; Stas Ponomaryov, 2023
+          <footer className={'site-footer p-2'}>
+            <div class={'footer-content h-full p-2 bg-amber-300 rounded-md dark:bg-gray-600 dark:text-white flex items-center'}>
+              &copy; Stas Ponomaryov, 2023
+            </div>
           </footer>
         </div>
       ) : (

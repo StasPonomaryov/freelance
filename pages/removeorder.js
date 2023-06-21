@@ -78,11 +78,11 @@ export default function RemoveOrder({ orders, clients }) {
   }, [orderId]);
 
   return (
-    <main className="remove-order bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="remove-order content bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Remove order
       </h1>
-      <div className="container p-4">        
+      <div className="container">        
         {typeof orderId === 'undefined' && (
           <div className="order md:w-2/4 sm:w-full">
             <label

@@ -26,7 +26,54 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 9fr auto;
+  grid-template-areas: "header header" 
+                       "side main"
+                       "footer footer";
+}
+
+.site-header {
+  grid-area: header;
+  height: 64px;
+}
+
+.sidebar-nav {
+  bottom: 64px;
+  grid-area: side;  
+  transition: all 1s;
+  top: 64px;
+  width: 300px;
+  z-index: 9;
+}
+
+.content {
+  transition: all 1.2s;
+}
+
+.sidebar-nav.collapsed {
+  width: 64px;
+}
+
+.sidebar-nav.collapsed + .content {
+  padding-left: 64px;
+}
+
+.site-footer {
+  grid-area: footer;
+  height: 64px
+}
+
+@media (min-width: 1024px) {
+  .sidebar-nav + .content {
+    padding-left: 300px;
+  }
+}
+
 .td-class {
+  width: 100%;
   @apply bg-amber-400 dark:bg-gray-700 px-4 py-3 first:rounded-t-lg last:rounded-b-lg sm:first:rounded-t-none sm:last:rounded-b-none sm:first:rounded-tl-lg sm:first:rounded-bl-lg sm:last:rounded-tr-lg sm:last:rounded-br-lg 
 }
 

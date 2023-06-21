@@ -19,17 +19,12 @@ export default function Sidebar(props) {
 
   return (
     <aside className={classNames({
-      "site-sidebar bg-purple-600 dark:bg-gray-900 py-3 px-8": true,
-      "fixed md:static md:translate-x-0 h-full": true,
-      "w-[300px]": !collapsed,
-      "w-16": collapsed,
-      "md:-translate-x-full": !shown,
+      'sidebar-nav p-2 fixed': true,
+      'collapsed': collapsed
     })}
     >
       <div
-        className={classnames({
-          'flex flex-col justify-between': true,
-        })}
+        className={'sidebar-content bg-purple-700 dark:bg-gray-950 rounded-md dark:text-white h-full'}
       >
         <div
           className={classnames({
@@ -49,7 +44,7 @@ export default function Sidebar(props) {
           </button>
         </div>
         {!collapsed && (
-          <ul className={`list-none flex-grow ${styles.menu}`}>
+          <ul className={`list-none px-6 ${styles.menu}`}>
             <MenuItem icon={<BiHomeAlt />} label="Home" href="/admin" />
             <MenuItem
               icon={<BiCalendarCheck />}

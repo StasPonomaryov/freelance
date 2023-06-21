@@ -75,11 +75,11 @@ export default function Orders({ orders }) {
   }
 
   return (
-    <main className="orders bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="content orders bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Orders list
       </h1>
-      <div className="container p-4">
+      <div className="container">
         {orders.length > 0 ? (
           <div className="flex flex-col ml-4 sm:ml-0">
             <Table

@@ -126,11 +126,11 @@ export default function Clients() {
   }, []);
 
   return (
-    <main className="clients bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="clients content bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Clients list
       </h1>
-      <div className="container p-4">
+      <div className="container">
         {clients.length > 0 ? (
           <form
             className="flex flex-col ml-4 sm:ml-0"
@@ -177,6 +177,7 @@ export default function Clients() {
                   ],
                 };
               })}
+              onRowClick={() => { return false}}
             />
             <div className="flex flex-row justify-between">
               <Pagination

@@ -125,11 +125,11 @@ export default function EditOrder({ orders, clients }) {
   }, [orderId, setValues]);
 
   return (
-    <main className="edit-order bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="edit-order content bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Edit order
       </h1>
-      <div className="container p-4">
+      <div className="container">
         {typeof orderId === 'undefined' && (
           <div className="order md:w-2/4 sm:w-full">
             <label

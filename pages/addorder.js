@@ -93,11 +93,11 @@ export default function AddOrder() {
   }, [setValues, values]);
 
   return (
-    <main className="add-client bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="content add-client bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Add order
       </h1>
-      <div className="container p-4">
+      <div className="container">
         <form className="mt-2 space-y-4" onSubmit={handleSubmit} noValidate>
           <div className="client-name md:w-2/4 sm:w-full">
             <label

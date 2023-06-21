@@ -31,7 +31,7 @@ export default function AddClient() {
   }
 
   return (
-    <main className="add-client bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="content add-client bg-amber-200 dark:bg-gray-800 p-3">
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Add client
       </h1>
@@ -52,7 +52,7 @@ export default function AddClient() {
               maxLength="128"
               onChange={handleChange}
               value={values.clientName || ''}
-              className={`w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+              className={`w-full lg:w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
                 errors.clientName && 'is-danger'
               }`}
             />
@@ -75,7 +75,7 @@ export default function AddClient() {
               maxLength="128"
               onChange={handleChange}
               value={values.clientDescription || ''}
-              className={`w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+              className={`w-full lg:w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
                 errors.clientDescription && 'is-danger'
               }`}
             />
@@ -98,7 +98,7 @@ export default function AddClient() {
               maxLength="128"
               onChange={handleChange}
               value={values.clientContacts || ''}
-              className={`w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
+              className={`w-full lg:w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
                 errors.clientContacts && 'is-danger'
               }`}
             />
