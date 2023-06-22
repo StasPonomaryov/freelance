@@ -45,7 +45,7 @@ export default function Layout(props) {
             </>
           )}
           <footer className={'site-footer p-2'}>
-            <div class={'footer-content h-full p-2 bg-amber-300 rounded-md dark:bg-gray-600 dark:text-white flex items-center'}>
+            <div className={'footer-content h-full p-2 bg-amber-300 rounded-md dark:bg-gray-600 dark:text-white flex items-center'}>
               &copy; Stas Ponomaryov, 2023
             </div>
           </footer>
