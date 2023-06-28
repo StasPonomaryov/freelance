@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import getClients from '@/controllers/getClients';
@@ -55,6 +56,9 @@ export default function EditClient() {
 
   return (
     <main className="edit-client content bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Edit client | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Edit client
       </h1>

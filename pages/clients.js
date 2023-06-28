@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { BiEdit, BiRefresh, BiTrash } from 'react-icons/bi';
 import getClients from '@/controllers/getClients';
@@ -127,6 +128,9 @@ export default function Clients() {
 
   return (
     <main className="clients content bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Clients | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Clients list
       </h1>
@@ -177,7 +181,9 @@ export default function Clients() {
                   ],
                 };
               })}
-              onRowClick={() => { return false}}
+              onRowClick={() => {
+                return false;
+              }}
             />
             <div className="flex flex-row justify-between">
               <Pagination

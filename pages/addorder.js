@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { nanoid } from 'nanoid';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
@@ -93,7 +94,10 @@ export default function AddOrder() {
   }, [setValues, values]);
 
   return (
-    <main className="content add-client bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="content add-order bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Add order | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Add order
       </h1>

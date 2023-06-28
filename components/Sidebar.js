@@ -36,13 +36,13 @@ export default function Sidebar(props) {
         <div
           className={classnames({
             'flex flex-col items-center': true,
-            'p-4 justify-center': !collapsed,
+            'p-4 justify-end': !collapsed,
             'py-4 justify-center': collapsed,
           })}
         >
           <button
             className={classnames({
-              'flex justify-center align-center ': true,
+              'flex justify-center align-center': true,
               'w-10 h-10 rounded-full ': true,
             })}
             onClick={() => setCollapsed(!collapsed)}

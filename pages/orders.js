@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
@@ -76,6 +77,9 @@ export default function Orders({ orders }) {
 
   return (
     <main className="content orders bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Orders | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Orders list
       </h1>

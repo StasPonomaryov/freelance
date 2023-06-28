@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import getClients from '@/controllers/getClients';
@@ -46,7 +47,10 @@ export default function RemoveClient() {
   }, []);
 
   return (
-    <main className="add-client content bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="remove-client content bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Remove client | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Remove client
       </h1>

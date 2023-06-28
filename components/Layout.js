@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Inter } from 'next/font/google';
@@ -10,7 +11,7 @@ import Sidebar from './Sidebar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Layout(props) {
-  const { children } = props;
+  const { children, title } = props;
   const { authUser, loading, logOut } = useAuth();
   const router = useRouter();
   const [collapsed, setSidebarCollapsed] = useState(true);
@@ -24,6 +25,11 @@ export default function Layout(props) {
     <>
       {router.pathname !== '/' ? (
         <div className={`${inter.className} wrapper bg-amber-200 dark:bg-gray-800 min-h-screen`}>
+          <Head>
+            <title>Freelance dashboard</title>
+            <meta charSet="utf-8" />
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          </Head>
           <header className={'site-header p-2'}>
             <Navbar authUser={authUser} signOut={logOut} />
           </header>

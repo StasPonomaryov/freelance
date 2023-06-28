@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
@@ -126,6 +127,9 @@ export default function EditOrder({ orders, clients }) {
 
   return (
     <main className="edit-order content bg-amber-200 dark:bg-gray-800 p-3">
+      <Head>
+        <title>Edit order | Freelance dashboard</title>
+      </Head>
       <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
         Edit order
       </h1>
