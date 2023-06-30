@@ -21,6 +21,7 @@ const useForm = (callback, validate) => {
 
   const handleChange = (event) => {
     event.persist();
+    event.target.classList.remove('is-danger');
     setValues(values => ({ ...values, [event.target.name]: event.target.value }));
   };
 

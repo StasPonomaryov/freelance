@@ -12,10 +12,9 @@ import {
   BiMessageSquareX,
   BiMessageSquareAdd,
 } from 'react-icons/bi';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import MenuItem from './MenuItem';
 import styles from './styles/aside.module.scss';
-import classNames from 'classnames';
 import MenuIcon from './MenuIcon';
 
 export default function Sidebar(props) {
@@ -34,14 +33,14 @@ export default function Sidebar(props) {
         }
       >
         <div
-          className={classnames({
+          className={classNames({
             'flex flex-col items-center': true,
             'p-4 justify-end': !collapsed,
             'py-4 justify-center': collapsed,
           })}
         >
           <button
-            className={classnames({
+            className={classNames({
               'flex justify-center align-center': true,
               'w-10 h-10 rounded-full ': true,
             })}
