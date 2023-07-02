@@ -83,12 +83,41 @@ body {
 }
 
 .input-field {
-  @apply w-full lg:w-1/3 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+  @apply w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+}
+
+.input-row {
+  @apply flex flex-row items-center w-2/4
+}
+
+.input-row > div:first-child {
+  @apply mr-1
+}
+
+.input-row > div {
+  @apply w-full
 }
 
 .submit-button {
   @apply text-white bg-blue-600
   hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:ring-blue-700 dark:focus:ring-blue-800
+}
+
+.search-dropdown {
+  @apply mt-2 text-sm text-gray-500 dark:text-gray-400
+}
+
+.client-name,
+.task-title {
+  @apply md:w-2/4 sm:w-full
+}
+
+.autocomplete-label {
+  @apply block mb-3 text-sm font-semibold text-gray-500
+}
+
+.autocomplete-tip {
+  @apply text-sm text-gray-500
 }
 
 .td-class {

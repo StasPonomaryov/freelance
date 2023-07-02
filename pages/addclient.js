@@ -46,7 +46,7 @@ export default function AddClient() {
             id="clientName"
             name="clientName"
             className={classNames({
-              'input-field': true,
+              'input-field lg:w-1/3': true,
               'is-danger': errors.clientName,
             })}
             mLength="128"

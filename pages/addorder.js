@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { nanoid } from 'nanoid';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import classNames from 'classnames';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddOrderValidationRules';
 import { useState, useEffect } from 'react';
@@ -11,6 +11,9 @@ import RadioButton from '@/components/RadioButton';
 import setTask from '@/controllers/setTask';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import SearchAutoComplete from '@/components/SearchAutoComplete';
+import InputText from '@/components/InputText';
+import InputDate from '@/components/InputDate';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -29,8 +32,7 @@ export const toggleStatus = (taskStatuses, id, checked) => {
   );
 };
 
-export default function AddOrder() {
-  const [clients, setClients] = useState([]);
+export default function AddOrder({ clients }) {
   const [clientSelected, setClientSelected] = useState(null);
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(
     submitCallback,
@@ -40,8 +42,11 @@ export default function AddOrder() {
   const [taskStatus, setTaskStatus] = useState(taskStatuses);
   const [saved, setSaved] = useState(false);
 
+  function handleOnSelect(item) {
+    setClientSelected(item.id);
+  }
+
   function submitCallback() {
-    console.log('>>>SUBMITTING ORDER');
     const orderData = {
       id: nanoid(10),
       clientId: clientSelected,
@@ -52,9 +57,8 @@ export default function AddOrder() {
       status: taskStatus.filter((i) => i.checked === true)[0].id,
       ...(values.taskEnd && { end: values.taskEnd }),
       ...(values.taskPriceStart && { priceStart: values.taskPriceStart }),
-      ...values.taskHours && { hours: values.taskHours }
+      ...(values.taskHours && { hours: values.taskHours }),
     };
-    console.log('>>>ORDER DATA', orderData);
     setTask(orderData)
       .then((r) => {
         setValues({});
@@ -67,129 +71,93 @@ export default function AddOrder() {
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
-  const formatResult = (item) => {
+  function formatResult(item) {
     return (
       <>
         <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {item.description}
-        </span>
+        <span className="search-dropdown">{item.description}</span>
       </>
     );
-  };
+  }
 
   function handleStatusChange(id, checked) {
-    console.log('>>>STATUS', taskStatus);
     setTaskStatus((taskStatus) => toggleStatus(taskStatus, id, checked));
   }
 
-  const handleOnSelect = (item) => {
-    setClientSelected(item.id);
-  };
-
-  useEffect(() => {
-    getClients().then((data) => {
-      setClients(data);
-    });
-  }, [setValues, values]);
-
   return (
-    <main className="content add-order bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="page-content">
       <Head>
         <title>Add order | Freelance dashboard</title>
       </Head>
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
-        Add order
-      </h1>
-      <div className="container">
+      <h1 className="page-title">Add order</h1>
+      <div className="container p-4">
         <form className="mt-2 space-y-4" onSubmit={handleSubmit} noValidate>
-          <div className="client-name md:w-2/4 sm:w-full">
-            <label
-              htmlFor="taskClient"
-              className="block mb-3 text-sm font-semibold text-gray-500"
-            >
-              Client<span className="required">*</span>
-            </label>
-            <ReactSearchAutocomplete
+          <div className="client-name">
+            <SearchAutoComplete
+              id="taskClient"
+              label="Client"
+              required={true}
               items={clients}
-              fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
-              onSelect={handleOnSelect}
-              autoFocus
+              keys={['name', 'description', 'contacts']}
+              handleOnSelect={handleOnSelect}
               formatResult={formatResult}
-              styling={{ borderRadius: '0.5rem' }}
+              tip="Start typing client name or description or contacts"
             />
-            <p className="text-sm text-gray-500">
-              Start typing client name or description or contacts
-            </p>
           </div>
-          <div className="task-title">
-            <label
-              htmlFor="taskTitle"
-              className="block mb-3 text-sm font-semibold text-gray-500"
-            >
-              Title<span className="required">*</span>
-            </label>
-            <input
-              id="taskTitle"
-              name="taskTitle"
-              required
-              type="text"
-              onChange={handleChange}
-              value={values.taskTitle || ''}
-              className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-            />
-            {errors.taskTitle && (
-              <p className="text-sm text-red-800">{errors.taskTitle}</p>
-            )}
-          </div>
+          <InputText
+            label="Title"
+            id="taskTitle"
+            name="taskTitle"
+            className={classNames({
+              'input-field lg:w-2/4': true,
+              'is-danger': errors.taskTitle,
+            })}
+            handleChange={handleChange}
+            value={values.taskTitle || ''}
+            req={true}
+            onError={errors.taskTitle}
+          />
           <div className="task-description">
             <MDEditor value={taskText} onChange={setTaskText} />
           </div>
-          <div className="flex flex-row items-center w-2/4">
-            <div className="task-date-start w-full mr-1">
-              <label
-                htmlFor="taskStart"
-                className="block mb-3 text-sm font-semibold text-gray-500"
-              >
-                Date started<span className="required">*</span>
-              </label>
-              <input
+          <div className="input-row">
+            <div className="task-date-start">
+              <InputDate
+                label="Date started"
                 id="taskStart"
                 name="taskStart"
-                required
-                type="date"
-                onChange={handleChange}
+                className={classNames({
+                  'input-field': true,
+                  'is-danger': errors.taskStart,
+                })}
+                handleChange={handleChange}
                 value={
                   values.taskStart || new Date().toLocaleDateString('uk-UA')
                 }
-                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                req={false}
+                onError={errors.taskStart}
               />
-              {errors.taskStart && (
-                <p className="text-sm text-red-800">{errors.taskStart}</p>
-              )}
             </div>
-            <div className="task-date-end w-full">
-              <label
-                htmlFor="taskEnd"
-                className="block mb-3 text-sm font-semibold text-gray-500"
-              >
-                Date ended
-              </label>
-              <input
+            <div className="task-date-end">
+              <InputDate
+                label="Date ended"
                 id="taskEnd"
                 name="taskEnd"
-                type="date"
-                onChange={handleChange}
-                value={values.taskEnd || new Date().toLocaleDateString('uk-UA')}
-                className={`w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                className={classNames({
+                  'input-field': true,
+                  'is-danger': errors.taskEnd,
+                })}
+                handleChange={handleChange}
+                value={
+                  values.taskStart || new Date().toLocaleDateString('uk-UA')
+                }
+                req={true}
+                onError={errors.taskEnd}
               />
-              {errors.taskEnd && (
-                <p className="text-sm text-red-800">{errors.taskEnd}</p>
-              )}
             </div>
           </div>
-          <div className="flex flex-row items-center w-full lg:w-2/4">
-            <div className="task-price-start w-full mr-1">
+          <div className="input-row">
+            <div className="task-price-start">
               <label
                 htmlFor="taskPriceStart"
                 className="block mb-3 text-sm font-semibold text-gray-500"
@@ -208,7 +176,7 @@ export default function AddOrder() {
                 <p className="text-sm text-red-800">{errors.taskPriceStart}</p>
               )}
             </div>
-            <div className="task-price-end w-full mr-1">
+            <div className="task-price-end">
               <label
                 htmlFor="taskPriceEnd"
                 className="block mb-3 text-sm font-semibold text-gray-500"
@@ -229,7 +197,7 @@ export default function AddOrder() {
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center w-full lg:w-2/4">
+          <div className="flex flex-row items-start w-full lg:w-2/4">
             <div className="task-hours w-full mr-1">
               <label
                 htmlFor="taskHours"
@@ -280,4 +248,14 @@ export default function AddOrder() {
       </div>
     </main>
   );
+}
+
+export async function getServerSideProps() {
+  const clients = await getClients();
+
+  return {
+    props: {
+      clients,
+    },
+  };
 }

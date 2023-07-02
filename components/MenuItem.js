@@ -10,11 +10,13 @@ export default function MenuItem(props) {
   const router = useRouter();
 
   return (
-    <li className={`${styles.item} ${router.pathname == href ? styles.active : ""}`}>
+    <li
+      className={`${styles.item} ${
+        router.pathname == href ? styles.active : ''
+      }`}
+    >
       {icon}
-      <Link href={href}>
-        {label}
-      </Link>
+      <Link href={href}>{label}</Link>
       {submenu && (
         <span onClick={() => setOpenedSubMenu(!openedSubmenu)}>
           <BiCaretDown />
