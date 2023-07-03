@@ -1,11 +1,3 @@
-import getClients from '@/controllers/getClients';
-import getTasksByYear from '@/controllers/getTasksByYear';
-import {
-  groupBy,
-  getPaidOrders,
-  getFinishedOrdersByYear,
-  getPaidOrdersByYear,
-} from '@/utils';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -16,6 +8,14 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import getClients from '@/controllers/getClients';
+import getTasksByYear from '@/controllers/getTasksByYear';
+import {
+  groupBy,
+  getPaidOrders,
+  getFinishedOrdersByYear,
+  getPaidOrdersByYear,
+} from '@/utils';
 
 ChartJS.register(
   CategoryScale,
@@ -56,7 +56,7 @@ const dynamicColor = () => {
   const g = Math.floor(Math.random() * 255);
   const b = Math.floor(Math.random() * 255);
 
-  return 'rgb(' + r + ',' + g + ',' + b + ')';
+  return `rgb(${r},${g},${b})`;
 };
 
 export default function Admin({ clients, filteredOrders }) {
@@ -70,7 +70,9 @@ export default function Admin({ clients, filteredOrders }) {
       },
     },
   };
+
   const ordersGroupedByClient = groupBy(filteredOrders, 'clientId');
+  
   const dataClientsOrders = {
     labels: labelsYear,
     datasets: Object.keys(ordersGroupedByClient).map((o) => {
@@ -115,11 +117,9 @@ export default function Admin({ clients, filteredOrders }) {
     ],
   };
 
-  console.log(getPaidOrdersByYear(filteredOrders));
-
   return (
-    <main className="content bg-amber-200 dark:bg-gray-800 p-3">
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
+    <main className="page-content">
+      <h1 className="page-title">
         Analytics
       </h1>
       <div className="container flex flex-wrap p-4">

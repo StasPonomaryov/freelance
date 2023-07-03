@@ -2,16 +2,15 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { BiEdit, BiRefresh, BiTrash } from 'react-icons/bi';
 import getClients from '@/controllers/getClients';
+import removeClients from '@/controllers/removeClients';
+import updateClients from '@/controllers/updateClients';
+import { paginate } from '@/utils/Paginate';
 import Alert from '@/components/Alert';
 import Table from '@/components/Table';
 import Checkbox from '@/components/Checkbox';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import ButtonGroup from '@/components/ButtonGroup';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/Modal';
-import { paginate } from '@/utils/Paginate';
-import removeClients from '@/controllers/removeClients';
-import updateClients from '@/controllers/updateClients';
 
 export default function Clients() {
   const [clients, setClients] = useState([]);
@@ -21,11 +20,14 @@ export default function Clients() {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
   const [updateButtonActive, setUpdateButtonActive] = useState(false);
+  
   const pageSize = 10;
   const paginatedPosts = paginate(clients, currentPage, pageSize);
+  
   const isChecked = (id) => {
     return checkedClients.some((client) => client === id);
   };
+  
   const actionButtons = [
     {
       icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
@@ -49,21 +51,18 @@ export default function Clients() {
 
   function handleCheckboxChange(event) {
     const selectedId = event.target.value;
+    let newIds = [...checkedClients];
+    newIds.push(selectedId);
     if (checkedClients.includes(selectedId)) {
-      const newIds = checkedClients.filter((id) => id !== selectedId);
-      setCheckedClients(newIds);
-    } else {
-      const newIds = [...checkedClients];
-      newIds.push(selectedId);
-      setCheckedClients(newIds);
+      newIds = checkedClients.filter((id) => id !== selectedId);      
     }
+    setCheckedClients(newIds);
   }
 
   function handleTableChange(event) {
+    event.target.style.background = '';
     if (event.target.value === '' && event.target.required === true) {
       event.target.style.background = '#a00';
-    } else {
-      event.target.style.background = '';
     }
     const updatedRow = formInputData.filter((r) => r.id === event.target.id);
     if (updatedRow.length) {
@@ -83,7 +82,6 @@ export default function Clients() {
       if (Object.values(i).some((v) => v === '')) emptyInput.push(i);
     });
     if (!emptyInput.length) {
-      console.log('>>>FORMINPUT', formInputData);
       const newData = (data) => [...data, formInputData];
       updateClients(formInputData).then(() => {
         setClients(newData);
