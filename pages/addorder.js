@@ -4,16 +4,17 @@ import { nanoid } from 'nanoid';
 import classNames from 'classnames';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddOrderValidationRules';
-import { useState, useEffect } from 'react';
-import Alert from '@/components/Alert';
+import { useState } from 'react';
 import getClients from '@/controllers/getClients';
-import RadioButton from '@/components/RadioButton';
 import setTask from '@/controllers/setTask';
-import '@uiw/react-md-editor/markdown-editor.css';
-import '@uiw/react-markdown-preview/markdown.css';
+import Alert from '@/components/Alert';
 import SearchAutoComplete from '@/components/SearchAutoComplete';
+import RadioButton from '@/components/RadioButton';
 import InputText from '@/components/InputText';
 import InputDate from '@/components/InputDate';
+import InputNumber from '@/components/InputNumber';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
 
 const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
@@ -158,69 +159,56 @@ export default function AddOrder({ clients }) {
           </div>
           <div className="input-row">
             <div className="task-price-start">
-              <label
-                htmlFor="taskPriceStart"
-                className="block mb-3 text-sm font-semibold text-gray-500"
-              >
-                Price start
-              </label>
-              <input
+              <InputNumber
+                label="Price start"
                 id="taskPriceStart"
                 name="taskPriceStart"
-                type="number"
-                onChange={handleChange}
+                className={classNames({
+                  'input-field': true,
+                  'is-danger': errors.taskPriceStart,
+                })}
                 value={values.taskPriceStart || ''}
-                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                handleChange={handleChange}
+                onError={errors.taskPriceStart}
+                req={false}
               />
-              {errors.taskPriceStart && (
-                <p className="text-sm text-red-800">{errors.taskPriceStart}</p>
-              )}
             </div>
             <div className="task-price-end">
-              <label
-                htmlFor="taskPriceEnd"
-                className="block mb-3 text-sm font-semibold text-gray-500"
-              >
-                Price end<span className="required">*</span>
-              </label>
-              <input
+              <InputNumber
+                label="Price end"
                 id="taskPriceEnd"
                 name="taskPriceEnd"
-                required
-                type="number"
-                onChange={handleChange}
+                className={classNames({
+                  'input-field': true,
+                  'is-danger': errors.taskPriceEnd,
+                })}
                 value={values.taskPriceEnd || ''}
-                className={`w-full lg:w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                handleChange={handleChange}
+                onError={errors.taskPriceEnd}
+                req={true}
               />
-              {errors.taskPriceEnd && (
-                <p className="text-sm text-red-800">{errors.taskPriceEnd}</p>
-              )}
             </div>
           </div>
-          <div className="flex flex-row items-start w-full lg:w-2/4">
-            <div className="task-hours w-full mr-1">
-              <label
-                htmlFor="taskHours"
-                className="block mb-3 text-sm font-semibold text-gray-500"
-              >
-                Hours spent
-              </label>
-              <input
+          <div className="input-row">
+            <div className="task-hours">
+              <InputNumber
+                label="Hours spent"
                 id="taskHours"
                 name="taskHours"
-                type="number"
-                onChange={handleChange}
+                className={classNames({
+                  'input-field': true,
+                  'is-danger': errors.taskHours,
+                })}
                 value={values.taskHours || ''}
-                className={`w-2/4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                handleChange={handleChange}
+                onError={errors.taskHours}
+                req={true}
               />
-              {errors.taskHours && (
-                <p className="text-sm text-red-800">{errors.taskHours}</p>
-              )}
             </div>
             <div className="task-status w-full">
               <label
                 htmlFor="task-status-radio"
-                className="block mb-3 text-sm font-semibold text-gray-500"
+                className="input-label"
               >
                 Order status
               </label>
@@ -239,8 +227,7 @@ export default function AddOrder({ clients }) {
           {saved ? <Alert info={true} message="Order added!" /> : ''}
           <button
             type="submit"
-            className="text-white bg-blue-600
-              hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:ring-blue-700 dark:focus:ring-blue-800"
+            className="submit-button"
           >
             Add
           </button>

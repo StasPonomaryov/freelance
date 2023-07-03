@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import TextInput from './TextInput';
+import TableInput from './TableInput';
 
 export default function Table(props) {
   const { ths, trs, onChangeInput, onRowClick } = props;
@@ -34,7 +34,7 @@ export default function Table(props) {
                 width={td.width}
               >
                 {td.checked ? (
-                  <TextInput
+                  <TableInput
                     id={tr.id}
                     value={td.cell}
                     name={td.label}
