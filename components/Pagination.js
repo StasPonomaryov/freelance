@@ -1,16 +1,16 @@
+import classNames from 'classnames';
+
 export default function Pagination(props) {
   const { items, pageSize, currentPage, onPageChange } = props;
-  console.log('>>>PROPS', props);
   const pagesCount = Math.ceil(items / pageSize);
   if (pagesCount === 1) return null;
   const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
 
   return (
-    <nav className="py-4">
-      <ul className="flex -space-x-px justify-end">
-        <li>
+    <nav>
+      <ul className="flex justify-end">
+        <li className="buttons-group start">
           <span
-            className="px-3 py-4 ml-0 leading-tight text-amber-500  border border-amber-300 rounded-l-lg hover:bg-amber-100 hover:text-amber-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
             onClick={() =>
               onPageChange(currentPage > 1 ? currentPage - 1 : currentPage)
             }
@@ -19,22 +19,18 @@ export default function Pagination(props) {
           </span>
         </li>
         {pages.map((page) => (
-          <li key={page}>
-            <span
-              className={
-                page === currentPage
-                  ? 'px-3 py-4 text-amber-600 border border-amber-300 bg-amber-50 hover:bg-amber-100 hover:text-amber-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                  : 'px-3 py-4 leading-tight text-amber-500 border border-amber-300 hover:bg-amber-100 hover:text-amber-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer'
-              }
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </span>
+          <li
+            key={page}
+            className={classNames({
+              'buttons-group': true,
+              'active': page === currentPage,
+            })}
+          >
+            <span onClick={() => onPageChange(page)}>{page}</span>
           </li>
         ))}
-        <li>
+        <li className="buttons-group end">
           <span
-            className="px-3 py-4 leading-tight text-amber-500 border border-amber-300 rounded-r-lg hover:bg-amber-100 hover:text-amber-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white cursor-pointer"
             onClick={() =>
               onPageChange(
                 currentPage < pagesCount ? currentPage + 1 : currentPage

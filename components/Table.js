@@ -3,16 +3,13 @@ import TableInput from './TableInput';
 
 export default function Table(props) {
   const { ths, trs, onChangeInput, onRowClick } = props;
-  console.log('>>>TRS', trs);
+
   return (
-    <table className="border-separate border-spacing-y-2 text-sm">
-      <thead className="text-black dark:text-white hidden md:table-header-group">
+    <table className="table-lines">
+      <thead className="thead-transparent">
         <tr>
           {ths.map((th) => (
-            <th
-              key={th.field || th.label}
-              className="p-3 text-left cursor-pointer"
-            >
+            <th key={th.field || th.label} className="th-class">
               {th.label}
             </th>
           ))}
@@ -20,7 +17,11 @@ export default function Table(props) {
       </thead>
       <tbody>
         {trs.map((tr, index) => (
-          <tr className="tr-class" key={index} onClick={() => onRowClick(tr.id)}>
+          <tr
+            className="tr-class"
+            key={index}
+            onClick={() => onRowClick(tr.id)}
+          >
             {tr.tds.map((td, index) => (
               <td
                 key={index}
@@ -29,7 +30,7 @@ export default function Table(props) {
                   processing: tr.taskStatus === 2,
                   done: tr.taskStatus === 1,
                   canceled: tr.taskStatus === 0,
-                  checked: tr.checked === true
+                  checked: tr.checked === true,
                 })}
                 width={td.width}
               >

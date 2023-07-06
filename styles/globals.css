@@ -132,12 +132,28 @@ body {
   @apply text-sm text-gray-500
 }
 
+.table-lines {
+  @apply border-separate border-spacing-y-2 text-sm
+}
+
+.thead-transparent {
+  @apply text-black dark:text-white hidden md:table-header-group
+}
+
+.th-class {
+  @apply p-3 text-left cursor-pointer
+}
+
 .td-class {
   @apply bg-amber-400 dark:bg-gray-700 px-4 py-3 first:rounded-t-lg last:rounded-b-lg sm:first:rounded-t-none sm:last:rounded-b-none sm:first:rounded-tl-lg sm:first:rounded-bl-lg sm:last:rounded-tr-lg sm:last:rounded-br-lg 
 }
 
 .tr-class {
   @apply flex flex-col mb-4 sm:table-row
+}
+
+.button-icon {
+  @apply w-4 h-4 mr-2 fill-current
 }
 
 .canceled {
@@ -154,6 +170,102 @@ body {
 
 .checked {
   @apply bg-amber-200 text-gray-900
+}
+
+.buttons-group {
+  @apply flex items-center px-3 py-4 ml-0 leading-tight text-amber-500 dark:text-gray-400 text-sm border border-amber-300 font-medium hover:bg-amber-100 hover:text-amber-700 focus:z-10 focus:ring-2 focus:ring-amber-500 focus:bg-amber-900 focus:text-white dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-600 cursor-pointer
+}
+
+.buttons-group.start {
+  @apply rounded-l-lg
+}
+
+.buttons-group.end {
+  @apply rounded-r-lg
+}
+
+.buttons-group.active {
+  @apply text-amber-600 dark:bg-gray-600 dark:text-white bg-amber-50
+}
+
+.modal-backdrop {
+  @apply justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 bg-black/[.35] outline-none focus:outline-none
+}
+
+.modal-warpper {
+  @apply relative w-full max-w-2xl max-h-full
+}
+
+.modal {
+  @apply relative bg-amber-200 rounded-lg shadow dark:bg-gray-700
+}
+
+.modal-header {
+  @apply flex items-start justify-between p-4 border-b rounded-t border-amber-300 dark:border-gray-600
+}
+
+.modal-header h3 {
+  @apply text-xl font-semibold text-gray-900 dark:text-white
+}
+
+.modal-close-button {
+  @apply text-amber-400 bg-transparent hover:bg-amber-200 hover:text-amber-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white dark:text-white
+}
+
+.modal-body {
+  @apply p-6 space-y-6
+}
+
+.modal-body p {
+  @apply text-base leading-relaxed text-gray-800 dark:text-gray-400
+}
+
+.modal-footer {
+  @apply flex items-center p-6 space-x-2  rounded-b justify-end
+}
+
+.modal-footer-button {
+  @apply text-amber-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center border border-amber-500 focus:ring-4 hover:bg-amber-300 focus:outline-none focus:ring-amber-300 dark:text-white dark:focus:ring-amber-800 dark:bg-gray-700  dark:border-gray-200 dark:hover:bg-gray-800
+}
+
+.modal-footer-button.red {
+  @apply bg-red-700
+}
+
+.alert {
+  @apply p-4 border-l-4 dark:bg-gray-900 dark:text-white
+}
+
+.alert-orange {
+  @apply bg-orange-50 border-orange-500 text-orange-700 dark:border-orange-400
+}
+
+.alert-blue {
+  @apply bg-blue-50 border-blue-500 text-blue-700 dark:border-blue-400
+}
+
+.alert-red {
+  @apply bg-red-50 border-red-500 text-red-700 dark:border-red-400
+}
+
+.checkbox {
+  @apply flex items-center justify-end
+}
+
+.checkbox-input {
+  @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
+}
+
+.checkbox-label {
+  @apply ml-2 text-sm font-medium text-gray-900 dark:text-gray-300
+}
+
+.clients-form {
+  @apply flex flex-col ml-4 sm:ml-0
+}
+
+.actions-area {
+  @apply flex flex-row justify-between
 }
 
 @media (max-width: 560px) {

@@ -57,15 +57,15 @@ export default function Sidebar(props) {
               hidden: !collapsed,
             })}
           >
-            <MenuIcon href="/admin" icon={<BiHomeAlt />} />
-            <MenuIcon href="/orders" icon={<BiCalendarCheck />} />
-            <MenuIcon href="/addorder" icon={<BiMessageAltAdd />} />
-            <MenuIcon href="/editorder" icon={<BiMessageAltEdit />} />
-            <MenuIcon href="/removeorder" icon={<BiMessageAltX />} />
-            <MenuIcon href="/clients" icon={<BiUser />} />
-            <MenuIcon href="/addclient" icon={<BiMessageSquareAdd />} />
-            <MenuIcon href="/editclient" icon={<BiMessageSquareEdit />} />
-            <MenuIcon href="/removeclient" icon={<BiMessageSquareX />} />
+            <MenuIcon href="/admin" title="Home" icon={<BiHomeAlt />} />
+            <MenuIcon href="/orders" title="Orders" icon={<BiCalendarCheck />} />
+            <MenuIcon href="/addorder" title="Add order" icon={<BiMessageAltAdd />} />
+            <MenuIcon href="/editorder" title="Edit order" icon={<BiMessageAltEdit />} />
+            <MenuIcon href="/removeorder" title="Remove order" icon={<BiMessageAltX />} />
+            <MenuIcon href="/clients" title="Clients" icon={<BiUser />} />
+            <MenuIcon href="/addclient" title="Add client" icon={<BiMessageSquareAdd />} />
+            <MenuIcon href="/editclient" title="Edit client" icon={<BiMessageSquareEdit />} />
+            <MenuIcon href="/removeclient" title="Remove client" icon={<BiMessageSquareX />} />
           </ul>
         </div>
         {!collapsed && (

@@ -60,7 +60,7 @@ export default function AddClient() {
             id="clientDescription"
             name="clientDescription"
             className={classNames({
-              'input-field': true,
+              'input-field lg:w-1/3': true,
               'is-danger': errors.clientDescription,
             })}
             mLength="128"
@@ -74,7 +74,7 @@ export default function AddClient() {
             id="clientContacts"
             name="clientContacts"
             className={classNames({
-              'input-field': true,
+              'input-field lg:w-1/3': true,
               'is-danger': errors.clientContacts,
             })}
             mLength="128"

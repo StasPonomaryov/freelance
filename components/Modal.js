@@ -1,20 +1,18 @@
-import { useState } from 'react';
+import classNames from 'classnames';
 
 export default function Modal(props) {
   const { title, text, setOpenModal, buttons } = props;
 
   return (
-    <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-      <div className="relative w-full max-w-2xl max-h-full">
-        <div className="relative bg-amber-200 rounded-lg shadow dark:bg-gray-700">
-          <div className="flex items-start justify-between p-4 border-b rounded-t border-amber-300 dark:border-gray-600">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              {title}
-            </h3>
+    <div className="modal-backdrop">
+      <div className="modal-wrapper">
+        <div className="modal">
+          <div className="modal-header">
+            <h3>{title}</h3>
             <button
               type="button"
               onClick={() => setOpenModal(false)}
-              className="text-amber-400 bg-transparent hover:bg-amber-200 hover:text-amber-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white dark:text-white"
+              className="modal-close-button"
             >
               <svg
                 aria-hidden="true"
@@ -32,13 +30,11 @@ export default function Modal(props) {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className="p-6 space-y-6">
-            <p className="text-base leading-relaxed text-gray-800 dark:text-gray-400">
-              {text}
-            </p>
+          <div className="modal-body">
+            <p>{text}</p>
           </div>
           {buttons && (
-            <div className="flex items-center p-6 space-x-2  rounded-b justify-end">
+            <div className="modal-footer">
               {buttons.map((button) => (
                 <button
                   key={button.label}
@@ -47,8 +43,10 @@ export default function Modal(props) {
                       ? () => button.click()
                       : () => setOpenModal(false)
                   }
-                  type="button"
-                  className={`text-amber-900 focus:ring-4 focus:outline-none focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-amber-800 border border-amber-500 dark:border-gray-200`}
+                  className={classNames({
+                    'modal-footer-button': true,
+                    red: button.background && button.background === 'red',
+                  })}
                 >
                   {button.label}
                 </button>

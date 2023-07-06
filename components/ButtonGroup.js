@@ -4,7 +4,7 @@ export default function ButtonGroup(props) {
   const { buttons } = props;
 
   return buttons.length ? (
-    <div className="inline-flex rounded-md shadow-sm" role="group">
+    <div className="flex justify-end" role="group">
       {buttons.map((button, index) =>
         button.active ? (
           <Button

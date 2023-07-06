@@ -20,29 +20,29 @@ export default function Clients() {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
   const [updateButtonActive, setUpdateButtonActive] = useState(false);
-  
+
   const pageSize = 10;
   const paginatedPosts = paginate(clients, currentPage, pageSize);
-  
+
   const isChecked = (id) => {
     return checkedClients.some((client) => client === id);
   };
-  
+
   const actionButtons = [
     {
-      icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
+      icon: <BiEdit className="button-icon" />,
       label: 'Edit client(s)',
       onClick: handleEditButton,
       active: true,
     },
     {
-      icon: <BiRefresh className="w-4 h-4 mr-2 fill-current b-green" />,
+      icon: <BiRefresh className="button-icon" />,
       label: 'Update',
       onClick: handleFormSubmit,
       active: updateButtonActive,
     },
     {
-      icon: <BiTrash className="w-4 h-4 mr-2 fill-current" />,
+      icon: <BiTrash className="button-icon" />,
       label: 'Remove client(s)',
       onClick: handleRemoveButton,
       active: true,
@@ -54,7 +54,7 @@ export default function Clients() {
     let newIds = [...checkedClients];
     newIds.push(selectedId);
     if (checkedClients.includes(selectedId)) {
-      newIds = checkedClients.filter((id) => id !== selectedId);      
+      newIds = checkedClients.filter((id) => id !== selectedId);
     }
     setCheckedClients(newIds);
   }
@@ -102,7 +102,7 @@ export default function Clients() {
     }
   }
 
-  async function approveRemoving() {
+  function approveRemoving() {
     removeClients(checkedClients).then(() => {
       let clientsCopy = [...clients];
       checkedClients.forEach((i) => {
@@ -125,22 +125,22 @@ export default function Clients() {
   }, []);
 
   return (
-    <main className="clients content bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="page-content">
       <Head>
         <title>Clients | Freelance dashboard</title>
       </Head>
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
-        Clients list
-      </h1>
-      <div className="container">
+      <h1 className="page-title">Clients list</h1>
+      <div className="container p-4">
         {clients.length > 0 ? (
-          <form
-            className="flex flex-col ml-4 sm:ml-0"
-            onSubmit={handleFormSubmit}
-          >
+          <form className="clients-form" onSubmit={handleFormSubmit}>
             <Table
               onChangeInput={handleTableChange}
-              ths={['Name', 'Description', 'Contacts', 'Check']}
+              ths={[
+                { field: 'name', label: 'Name' },
+                { field: 'description', label: 'Description' },
+                { field: 'contacts', label: 'Contacts' },
+                { field: 'check', label: 'Check' },
+              ]}
               trs={paginatedPosts.map((client) => {
                 return {
                   id: client.id,
@@ -183,7 +183,7 @@ export default function Clients() {
                 return false;
               }}
             />
-            <div className="flex flex-row justify-between">
+            <div className="actions-area">
               <Pagination
                 items={clients.length}
                 currentPage={currentPage}
@@ -214,7 +214,6 @@ export default function Clients() {
               },
               {
                 label: 'No',
-                background: '',
               },
             ]}
           />
