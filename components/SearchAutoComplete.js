@@ -10,6 +10,7 @@ export default function SearchAutoComplete(props) {
     handleOnSelect,
     formatResult,
     tip,
+    resultStringKeyName
   } = props;
   return (
     <>
@@ -24,7 +25,8 @@ export default function SearchAutoComplete(props) {
         onSelect={handleOnSelect}
         autoFocus
         formatResult={formatResult}
-        styling={{ borderRadius: '0.5rem' }}
+        styling={{ borderRadius: '0.5rem', zIndex: 3 }}
+        resultStringKeyName={resultStringKeyName}
       />
       {tip && <p className="autocomplete-tip">{tip}</p>}
     </>

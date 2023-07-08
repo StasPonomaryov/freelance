@@ -135,7 +135,7 @@ export default function AddOrder({ clients }) {
                 value={
                   values.taskStart || new Date().toLocaleDateString('uk-UA')
                 }
-                req={false}
+                req={true}
                 onError={errors.taskStart}
               />
             </div>
@@ -152,7 +152,7 @@ export default function AddOrder({ clients }) {
                 value={
                   values.taskStart || new Date().toLocaleDateString('uk-UA')
                 }
-                req={true}
+                req={false}
                 onError={errors.taskEnd}
               />
             </div>
@@ -205,11 +205,8 @@ export default function AddOrder({ clients }) {
                 req={true}
               />
             </div>
-            <div className="task-status w-full">
-              <label
-                htmlFor="task-status-radio"
-                className="input-label"
-              >
+            <div className="task-status">
+              <label htmlFor="task-status-radio" className="input-label">
                 Order status
               </label>
               {taskStatus.map(({ id, name, checked }) => (
@@ -225,10 +222,7 @@ export default function AddOrder({ clients }) {
             </div>
           </div>
           {saved ? <Alert info={true} message="Order added!" /> : ''}
-          <button
-            type="submit"
-            className="submit-button"
-          >
+          <button type="submit" className="submit-button">
             Add
           </button>
         </form>

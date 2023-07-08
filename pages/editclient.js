@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import getClients from '@/controllers/getClients';
+import setClient from '@/controllers/setClient';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddClientValidationRules';
 import Alert from '@/components/Alert';
-import setClient from '@/controllers/setClient';
 import InputText from '@/components/InputText';
+import SearchAutoComplete from '@/components/SearchAutoComplete';
 
 export default function EditClient({ clients }) {
   const [selected, setSelected] = useState(null);
@@ -30,9 +30,7 @@ export default function EditClient({ clients }) {
     return (
       <>
         <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-        <span className="results-description">
-          {item.description}
-        </span>
+        <span className="search-dropdown">{item.description}</span>
       </>
     );
   };
@@ -60,17 +58,16 @@ export default function EditClient({ clients }) {
       </Head>
       <h1 className="page-title">Edit client</h1>
       <div className="container p-4">
-        <p className="mb-2">
-          Start typing client name or description or contacts
-        </p>
         <div className="md:w-2/4 sm:w-full">
-          <ReactSearchAutocomplete
+          <SearchAutoComplete
+            id="taskClient"
+            label="Client"
+            required={true}
             items={clients}
-            fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
-            onSelect={handleOnSelect}
-            autoFocus
+            keys={['name', 'description', 'contacts']}
+            handleOnSelect={handleOnSelect}
             formatResult={formatResult}
-            styling={{ borderRadius: '0.5rem', zIndex: 3 }}
+            tip="Start typing client name or description or contacts"
           />
         </div>
         {selected ? (

@@ -268,8 +268,8 @@ body {
   @apply flex flex-row justify-between
 }
 
-.results-description {
-  @apply mt-2 text-sm text-gray-500 dark:text-gray-400
+.radio-button-vertical {
+  @apply flex items-center mb-4
 }
 
 @media (max-width: 560px) {
