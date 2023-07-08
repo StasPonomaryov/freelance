@@ -30,6 +30,10 @@ body {
   @apply bg-rose-400 !important
 }
 
+.error {
+  @apply text-xs text-red-400
+}
+
 .wrapper {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -51,6 +55,26 @@ body {
   top: 64px;
   width: 300px;
   z-index: 9;
+}
+
+.index-wrapper {
+  @apply bg-gray-50 dark:bg-gray-900 h-screen
+}
+
+.index-container {
+  @apply flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0
+}
+
+.login-frame {
+  @apply w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700
+}
+
+.login-frame-content {
+  @apply p-6 space-y-4 md:space-y-6 sm:p-8
+}
+
+.login-title {
+  @apply text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white
 }
 
 .content {
@@ -270,6 +294,10 @@ body {
 
 .radio-button-vertical {
   @apply flex items-center mb-4
+}
+
+.orders-wrapper {
+  @apply flex flex-col ml-4 sm:ml-0
 }
 
 @media (max-width: 560px) {

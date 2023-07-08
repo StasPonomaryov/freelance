@@ -4,14 +4,12 @@ import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BiEdit, BiTrash } from 'react-icons/bi';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import Alert from '@/components/Alert';
-import Table from '@/components/Table';
-// import OrdersTable from '@/components/OrdersTable';
-import Pagination from '@/components/Pagination';
-import ButtonGroup from '@/components/ButtonGroup';
 import getTasks from '@/controllers/getTasks';
 import { paginate } from '@/utils/Paginate';
+import Alert from '@/components/Alert';
+import Table from '@/components/Table';
+import Pagination from '@/components/Pagination';
+import ButtonGroup from '@/components/ButtonGroup';
 
 export default function Orders({ orders }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,13 +38,13 @@ export default function Orders({ orders }) {
 
   const actionButtons = [
     {
-      icon: <BiEdit className="w-4 h-4 mr-2 fill-current" />,
+      icon: <BiEdit className="button-icon" />,
       label: 'Edit order',
       onClick: handleEditButton,
       active: true,
     },
     {
-      icon: <BiTrash className="w-4 h-4 mr-2 fill-current" />,
+      icon: <BiTrash className="button-icon" />,
       label: 'Remove order',
       onClick: handleRemoveButton,
       active: true,
@@ -54,20 +52,18 @@ export default function Orders({ orders }) {
   ];
 
   function handleRowClick(row) {
-    console.log('>>>ROW', row);
     if (checkedRow == row) {
       return setCheckedRow(null);
     }
+
     return setCheckedRow(row);
   }
 
   function handleEditButton() {
-    console.log('>>>EDIT CLICKED', checkedRow);
     router.push(`/editorder?orderId=${checkedRow}`);
   }
 
   function handleRemoveButton() {
-    console.log('>>>REMOVE CLICKED');
     router.push(`/removeorder?orderId=${checkedRow}`);
   }
 
@@ -76,16 +72,16 @@ export default function Orders({ orders }) {
   }
 
   return (
-    <main className="content orders bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="page-content">
       <Head>
         <title>Orders | Freelance dashboard</title>
       </Head>
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
+      <h1 className="page-title">
         Orders list
       </h1>
-      <div className="container">
+      <div className="container p-4">
         {orders.length > 0 ? (
-          <div className="flex flex-col ml-4 sm:ml-0">
+          <div className="orders-erapper">
             <Table
               ths={tableFields}
               trs={paginatedPosts.map((order) => {
@@ -138,11 +134,7 @@ export default function Orders({ orders }) {
               })}
               onRowClick={handleRowClick}
             />
-            {/* <OrdersTable
-              data={paginatedPosts}
-              columns={tableFields}
-            /> */}
-            <div className="flex flex-row justify-between">
+            <div className="actions-area">
               <Pagination
                 items={orders.length}
                 currentPage={currentPage}
