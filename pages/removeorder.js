@@ -1,17 +1,16 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import dynamic from 'next/dynamic';
-import classNames from 'classnames';
 import getTasks from '@/controllers/getTasks';
 import getTask from '@/controllers/getTask';
-import Alert from '@/components/Alert';
-import { taskStatuses } from './addorder';
 import getClients from '@/controllers/getClients';
 import removeTask from '@/controllers/removeTask';
+import Alert from '@/components/Alert';
+import Table from '@/components/Table';
+import SearchAutoComplete from '@/components/SearchAutoComplete';
+import { taskStatuses } from './addorder';
 
 export default function RemoveOrder({ orders, clients }) {
   const router = useRouter();
@@ -19,13 +18,33 @@ export default function RemoveOrder({ orders, clients }) {
   const [order, setOrder] = useState(null);
   const [saved, setSaved] = useState(false);
 
+  const tableFields = [
+    { field: 'client', label: 'Client' },
+    { field: 'title', label: 'Title' },
+    { label: 'Description' },
+    { field: 'priceStart', label: 'Price start' },
+    { field: 'priceEnd', label: 'Price end' },
+    { field: 'start', label: 'Date start' },
+    { field: 'end', label: 'Date end' },
+    { field: 'hours', label: 'Hours' },
+    { label: 'Status' },
+  ];
+
+  const parseOrderStatus = (status) => {
+    return {
+      canceled: 0,
+      done: 1,
+      processing: 2,
+    }[status];
+  };
+
   const formatResult = (item) => {
     return (
       <>
         <span style={{ display: 'block', textAlign: 'left' }}>
           {item.title}
         </span>
-        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        <span className="search-dropdown">
           {item.start}
         </span>
       </>
@@ -33,12 +52,13 @@ export default function RemoveOrder({ orders, clients }) {
   };
 
   function handleSubmit() {
-    console.log('>>>SUBMITTING REMOVE');
-    removeTask(order.id).then(() => setSaved(true));
+    removeTask(order.id).then(() => {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 5000);
+    });
   }
 
   const handleOnSelect = (item) => {
-    console.log('>>>ITEM', item);
     const status = taskStatuses.find((s) => s.id === item.status).name;
 
     setOrder({
@@ -58,7 +78,6 @@ export default function RemoveOrder({ orders, clients }) {
   useEffect(() => {
     if (orderId) {
       getTask(orderId).then((order) => {
-        console.log(order);
         if (!Object.keys(order).length) return;
         const status = taskStatuses.find((s) => s.id === order.status).name;
 
@@ -79,160 +98,76 @@ export default function RemoveOrder({ orders, clients }) {
   }, [orderId]);
 
   return (
-    <main className="remove-order content bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="page-content">
       <Head>
         <title>Remove order | Freelance dashboard</title>
       </Head>
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
-        Remove order
-      </h1>
-      <div className="container">
+      <h1 className="page-title">Remove order</h1>
+      <div className="container p-4">
         {typeof orderId === 'undefined' && (
           <div className="order md:w-2/4 sm:w-full">
-            <label
-              htmlFor="taskOrder"
-              className="block mb-3 text-sm font-semibold text-gray-500"
-            >
-              Order<span className="required">*</span>
-            </label>
-            <ReactSearchAutocomplete
+            <SearchAutoComplete
+              id="taskOrder"
+              label="Order"
+              required={true}
               items={orders}
-              fuseOptions={{ keys: ['title', 'start', 'id'] }}
-              onSelect={handleOnSelect}
-              autoFocus
+              keys={['title', 'start', 'id']}
+              handleOnSelect={handleOnSelect}
               formatResult={formatResult}
+              tip="Start typing order title or start time"
               resultStringKeyName="title"
-              styling={{ borderRadius: '0.5rem', zIndex: 3 }}
             />
-            <p className="text-sm text-gray-500">
-              Start typing order title or start time
-            </p>
           </div>
         )}
-        {order ? (
+        {order && (
           <>
-            <table className="border-separate border-spacing-y-2 text-sm">
-              <thead className="text-black dark:text-white hidden md:table-header-group">
-                <tr>
-                  <th className="p-3 text-left cursor-pointer">Client</th>
-                  <th className="p-3 text-left cursor-pointer">Title</th>
-                  <th className="p-3 text-left cursor-pointer">Description</th>
-                  <th className="p-3 text-left cursor-pointer">Price start</th>
-                  <th className="p-3 text-left cursor-pointer">Price end</th>
-                  <th className="p-3 text-left cursor-pointer">Date start</th>
-                  <th className="p-3 text-left cursor-pointer">Date end</th>
-                  <th className="p-3 text-left cursor-pointer">Hours</th>
-                  <th className="p-3 text-left cursor-pointer">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="tr-class">
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {clients.find((c) => c.id === order.client).name}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.taskTitle}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {order.text}
-                    </ReactMarkdown>
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.priceStart || '-'}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.priceEnd || '-'}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.start || '-'}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.end || '-'}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.taskHours || '-'}
-                  </td>
-                  <td
-                    className={classNames({
-                      'td-class': true,
-                      processing: order.status === 'processing',
-                      done: order.status === 'done',
-                      canceled: order.status === 'canceled',
-                    })}
-                  >
-                    {order.status}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <Table
+              ths={tableFields}
+              trs={[
+                {
+                  id: 'orderSelected',
+                  taskStatus: parseOrderStatus(order.status),
+                  tds: [
+                    {
+                      cell: clients.find((c) => c.id === order.client).name,
+                    },
+                    {
+                      cell: order.taskTitle,
+                    },
+                    {
+                      cell: (
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {order.text}
+                        </ReactMarkdown>
+                      ),
+                    },
+                    {
+                      cell: order.priceStart || '-'
+                    },
+                    {
+                      cell: order.priceEnd || '-'
+                    },
+                    {
+                      cell: order.start || '-'
+                    },
+                    {
+                      cell: order.end || '-'
+                    },
+                    {
+                      cell: order.taskHours || '-'
+                    },
+                    {
+                      cell: order.status
+                    }
+                  ],
+                },
+              ]}
+            />
             {saved ? <Alert info={true} message="Order removed!" /> : ''}
-            <button
-              onClick={handleSubmit}
-              className="text-white bg-blue-600
-              hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:ring-blue-700 dark:focus:ring-blue-800"
-            >
+            <button onClick={handleSubmit} className="submit-button">
               Remove
             </button>
           </>
-        ) : (
-          <Alert danger={true} message="Order not found" />
         )}
       </div>
     </main>

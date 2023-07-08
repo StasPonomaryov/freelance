@@ -81,7 +81,7 @@ export default function Orders({ orders }) {
       </h1>
       <div className="container p-4">
         {orders.length > 0 ? (
-          <div className="orders-erapper">
+          <div className="orders-wrapper">
             <Table
               ths={tableFields}
               trs={paginatedPosts.map((order) => {

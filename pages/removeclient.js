@@ -1,13 +1,12 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { ReactSearchAutocomplete } from 'react-search-autocomplete';
+import { useState } from 'react';
 import getClients from '@/controllers/getClients';
+import removeClients from '@/controllers/removeClients';
 import Alert from '@/components/Alert';
 import Modal from '@/components/Modal';
-import removeClients from '@/controllers/removeClients';
+import SearchAutoComplete from '@/components/SearchAutoComplete';
 
-export default function RemoveClient() {
-  const [clients, setClients] = useState([]);
+export default function RemoveClient({ clients }) {
   const [selected, setSelected] = useState(null);
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -18,54 +17,39 @@ export default function RemoveClient() {
   };
 
   async function approveRemoving() {
-    removeClients([selected.id]).then(() => {
-      let clientsCopy = [...clients];
-      clientsCopy = clientsCopy.filter((c) => c.id !== selected.id);
-      console.log('>>>CLIENTS COPY', clientsCopy);
-      setClients(clientsCopy);
-    });
+    await removeClients([selected.id]);
     setSelected(null);
     setShowModalRemove(false);
     setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 5000);
   }
 
   const formatResult = (item) => {
     return (
       <>
         <span style={{ display: 'block', textAlign: 'left' }}>{item.name}</span>
-        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          {item.description}
-        </span>
+        <span className="search-dropdown">{item.description}</span>
       </>
     );
   };
 
-  useEffect(() => {
-    getClients().then((data) => {
-      setClients(data);
-    });
-  }, []);
-
   return (
-    <main className="remove-client content bg-amber-200 dark:bg-gray-800 p-3">
+    <main className="page-content">
       <Head>
         <title>Remove client | Freelance dashboard</title>
       </Head>
-      <h1 className="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl dark:text-white">
-        Remove client
-      </h1>
-      <div className="container">
-        <p className="mb-2">
-          Start typing client name or description or contacts
-        </p>
+      <h1 className="page-title">Remove client</h1>
+      <div className="container p-4">
         <div className="md:w-2/4 sm:w-full">
-          <ReactSearchAutocomplete
+          <SearchAutoComplete
+            id="taskClient"
+            label="Client"
+            required={true}
             items={clients}
-            fuseOptions={{ keys: ['name', 'description', 'contacts'] }}
-            onSelect={handleOnSelect}
-            autoFocus
+            keys={['name', 'description', 'contacts']}
+            handleOnSelect={handleOnSelect}
             formatResult={formatResult}
-            styling={{ borderRadius: '0.5rem' }}
+            tip="Start typing client name or description or contacts"
           />
           {showAlert ? (
             <div className="mt-2">
@@ -94,4 +78,14 @@ export default function RemoveClient() {
       </div>
     </main>
   );
+}
+
+export async function getServerSideProps() {
+  const clients = await getClients();
+
+  return {
+    props: {
+      clients,
+    },
+  };
 }
