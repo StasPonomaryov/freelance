@@ -1,12 +1,10 @@
 export default function InputNumber(props) {
-  const { label, id, name, value, className, handleChange, req, onError } = props;
+  const { label, id, name, value, className, handleChange, req, onError } =
+    props;
 
   return (
     <>
-      <label
-        htmlFor={name}
-        className="input-label"
-      >
+      <label htmlFor={name} className="input-label">
         {label}
         {req && <span className="required">*</span>}
       </label>

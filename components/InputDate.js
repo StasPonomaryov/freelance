@@ -1,5 +1,6 @@
 export default function InputDate(props) {
-  const { label, id, name, value, className, handleChange, req, onError } = props;
+  const { label, id, name, value, className, handleChange, req, onError } =
+    props;
 
   return (
     <>

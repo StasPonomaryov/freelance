@@ -7,8 +7,11 @@ export default function MenuIcon(props) {
   const router = useRouter();
 
   return (
-    <li title={title}
-      className={`${styles.item} ${router.pathname == href ? styles.active : ""}`}
+    <li
+      title={title}
+      className={`${styles.item} ${
+        router.pathname == href ? styles.active : ''
+      }`}
     >
       <Link href={href}>{icon}</Link>
     </li>

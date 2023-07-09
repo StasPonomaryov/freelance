@@ -1,6 +1,15 @@
 export default function InputText(props) {
-  const { label, id, name, value, className, handleChange, req, mLength, onError } =
-    props;
+  const {
+    label,
+    id,
+    name,
+    value,
+    className,
+    handleChange,
+    req,
+    mLength,
+    onError,
+  } = props;
 
   return (
     <>

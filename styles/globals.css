@@ -35,6 +35,7 @@ body {
 }
 
 .wrapper {
+  @apply bg-amber-200 dark:bg-gray-800 min-h-screen
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 9fr auto;
@@ -46,6 +47,14 @@ body {
 .site-header {
   grid-area: header;
   height: 64px;
+}
+
+.header-content {
+  @apply h-full p-2 bg-amber-500 rounded-md dark:bg-gray-900 dark:text-white flex items-center
+}
+
+.footer-content {
+  @apply h-full p-2 bg-amber-300 rounded-md dark:bg-gray-600 dark:text-white flex items-center
 }
 
 .sidebar-nav {

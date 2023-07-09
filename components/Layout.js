@@ -24,13 +24,16 @@ export default function Layout(props) {
   return (
     <>
       {router.pathname !== '/' ? (
-        <div className={`${inter.className} wrapper bg-amber-200 dark:bg-gray-800 min-h-screen`}>
+        <div className={`${inter.className} wrapper`}>
           <Head>
             <title>Freelance dashboard</title>
             <meta charSet="utf-8" />
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+            />
           </Head>
-          <header className={'site-header p-2'}>
+          <header className="site-header p-2">
             <Navbar authUser={authUser} signOut={logOut} />
           </header>
           {loading ? (
@@ -50,10 +53,8 @@ export default function Layout(props) {
               {children}
             </>
           )}
-          <footer className={'site-footer p-2'}>
-            <div className={'footer-content h-full p-2 bg-amber-300 rounded-md dark:bg-gray-600 dark:text-white flex items-center'}>
-              &copy; Stas Ponomaryov, 2023
-            </div>
+          <footer className="site-footer p-2">
+            <div className="footer-content">&copy; Stas Ponomaryov, 2023</div>
           </footer>
         </div>
       ) : (
