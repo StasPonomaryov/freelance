@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { firebaseAuth } from './firebase';
+import { firebaseAuth } from '../lib/firebase';
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 const formatAuthUser = (user) => ({

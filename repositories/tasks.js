@@ -1,18 +1,10 @@
 const tasksRepo = (db) => ({
-  async saveTask(orderData) {
-    return await db.saveOrder(orderData);
-  },
-
-  async getTasks() {
-    return await db.getOrders();
-  },
-
   async getTask(id) {
     return await db.getOrder(id);
   },
 
-  async removeTask(id) {
-    return await db.removeOrder(id);
+  async getTasks() {
+    return await db.getOrders();
   },
 
   async getTasksByYear(year) {
@@ -25,6 +17,14 @@ const tasksRepo = (db) => ({
     });
 
     return filtered;
+  },
+
+  async removeTask(id) {
+    return await db.removeOrder(id);
+  },
+
+  async saveTask(orderData) {
+    return await db.saveOrder(orderData);
   },
 });
 
