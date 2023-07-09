@@ -11,7 +11,11 @@ function getDefaultSorting(tableData, columns) {
 
     if (a[field] === null || typeof a[field] === 'undefined') return 1;
     if (b[field] === null || typeof b[field] === 'undefined') return -1;
-    if ((a[field] === null || typeof a[field] === 'undefined') && (b[field] === null || typeof b[field] === 'undefined')) return 0;
+    if (
+      (a[field] === null || typeof a[field] === 'undefined') &&
+      (b[field] === null || typeof b[field] === 'undefined')
+    )
+      return 0;
 
     const ascending = a[field]
       .toString()
@@ -31,9 +35,15 @@ const useSortingInTable = (data, columns) => {
   const handleSorting = (sortField, sortOrder) => {
     if (sortField) {
       const sorted = [...tableData].sort((a, b) => {
-        if (a[sortField] === null || typeof a[sortField] === 'undefined') return 1;
-        if (b[sortField] === null || typeof b[sortField] === 'undefined') return -1;
-        if ((a[sortField] === null || typeof a[sortField] === 'undefined') && (b[sortField] === null || typeof b[sortField] === 'undefined')) return 0;
+        if (a[sortField] === null || typeof a[sortField] === 'undefined')
+          return 1;
+        if (b[sortField] === null || typeof b[sortField] === 'undefined')
+          return -1;
+        if (
+          (a[sortField] === null || typeof a[sortField] === 'undefined') &&
+          (b[sortField] === null || typeof b[sortField] === 'undefined')
+        )
+          return 0;
         return (
           a[sortField].toString().localeCompare(b[sortField].toString(), 'uk', {
             numeric: true,

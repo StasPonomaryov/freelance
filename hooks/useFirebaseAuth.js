@@ -18,11 +18,8 @@ export default function useFirebaseAuth() {
     }
 
     setLoading(true);
-
-    var formattedUser = formatAuthUser(authState);
-
+    const formattedUser = formatAuthUser(authState);
     setAuthUser(formattedUser);
-
     setLoading(false);
   };
 

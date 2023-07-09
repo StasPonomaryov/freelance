@@ -2,13 +2,12 @@
 import { useState, useEffect } from 'react';
 
 const useForm = (callback, validate) => {
-
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(errors).length === 0 && isSubmitting) {      
+    if (Object.keys(errors).length === 0 && isSubmitting) {
       callback();
     }
   }, [errors]);
@@ -22,7 +21,10 @@ const useForm = (callback, validate) => {
   const handleChange = (event) => {
     event.persist();
     event.target.classList.remove('is-danger');
-    setValues(values => ({ ...values, [event.target.name]: event.target.value }));
+    setValues((values) => ({
+      ...values,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   return {
@@ -30,8 +32,8 @@ const useForm = (callback, validate) => {
     handleSubmit,
     values,
     errors,
-    setValues
-  }
+    setValues,
+  };
 };
 
 export default useForm;
