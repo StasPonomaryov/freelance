@@ -150,7 +150,7 @@ export default function AddOrder({ clients }) {
                 })}
                 handleChange={handleChange}
                 value={
-                  values.taskStart || new Date().toLocaleDateString('uk-UA')
+                  values.taskEnd || new Date().toLocaleDateString('uk-UA')
                 }
                 req={false}
                 onError={errors.taskEnd}

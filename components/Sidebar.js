@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import {
   BiHomeAlt,
   BiCalendarCheck,
@@ -17,8 +16,70 @@ import MenuItem from './MenuItem';
 import styles from './styles/aside.module.scss';
 import MenuIcon from './MenuIcon';
 
+const links = [
+  {
+    id: 1,
+    href: '/admin',
+    label: 'Home',
+    icon: <BiHomeAlt />,
+    root: true,
+  },
+  {
+    id: 2,
+    href: '/orders',
+    label: 'Orders',
+    icon: <BiCalendarCheck />,
+    children: [3, 4, 5],
+    root: true,
+  },
+  {
+    id: 3,
+    href: '/addorder',
+    label: 'Add order',
+    icon: <BiMessageAltAdd />,
+  },
+  {
+    id: 4,
+    href: '/editorder',
+    label: 'Edit order',
+    icon: <BiMessageAltEdit />,
+  },
+  {
+    id: 5,
+    href: '/removeorder',
+    label: 'Remove order',
+    icon: <BiMessageAltX />,
+  },
+  {
+    id: 6,
+    href: '/clients',
+    label: 'Clients',
+    icon: <BiUser />,
+    children: [7, 8, 9],
+    root: true,
+  },
+  {
+    id: 7,
+    href: '/addclient',
+    label: 'Add client',
+    icon: <BiMessageSquareAdd />,
+  },
+  {
+    id: 8,
+    href: '/editclient',
+    label: 'Edit client',
+    icon: <BiMessageSquareEdit />,
+  },
+  {
+    id: 9,
+    href: '/removeclient',
+    label: 'Remove client',
+    icon: <BiMessageSquareX />,
+  },
+];
+
 export default function Sidebar(props) {
-  const { collapsed, setCollapsed, shown } = props;
+  const { collapsed, setCollapsed } = props;
 
   return (
     <aside
@@ -27,11 +88,7 @@ export default function Sidebar(props) {
         collapsed: collapsed,
       })}
     >
-      <div
-        className={
-          'sidebar-content bg-purple-700 dark:bg-gray-950 rounded-md dark:text-white h-full'
-        }
-      >
+      <div className="sidebar-content">
         <div
           className={classNames({
             'flex flex-col items-center': true,
@@ -40,10 +97,7 @@ export default function Sidebar(props) {
           })}
         >
           <button
-            className={classNames({
-              'flex justify-center align-center': true,
-              'w-10 h-10 rounded-full ': true,
-            })}
+            className="sidebar-button"
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? (
@@ -57,70 +111,45 @@ export default function Sidebar(props) {
               hidden: !collapsed,
             })}
           >
-            <MenuIcon href="/admin" title="Home" icon={<BiHomeAlt />} />
-            <MenuIcon href="/orders" title="Orders" icon={<BiCalendarCheck />} />
-            <MenuIcon href="/addorder" title="Add order" icon={<BiMessageAltAdd />} />
-            <MenuIcon href="/editorder" title="Edit order" icon={<BiMessageAltEdit />} />
-            <MenuIcon href="/removeorder" title="Remove order" icon={<BiMessageAltX />} />
-            <MenuIcon href="/clients" title="Clients" icon={<BiUser />} />
-            <MenuIcon href="/addclient" title="Add client" icon={<BiMessageSquareAdd />} />
-            <MenuIcon href="/editclient" title="Edit client" icon={<BiMessageSquareEdit />} />
-            <MenuIcon href="/removeclient" title="Remove client" icon={<BiMessageSquareX />} />
+            {links.map((i) => {
+              return (
+                <MenuIcon
+                  key={i.id}
+                  href={i.href}
+                  label={i.label}
+                  icon={i.icon}
+                />
+              );
+            })}
           </ul>
         </div>
         {!collapsed && (
           <ul className={`list-none px-6 ${styles.menu}`}>
-            <MenuItem icon={<BiHomeAlt />} label="Home" href="/admin" />
-            <MenuItem
-              icon={<BiCalendarCheck />}
-              label="Orders"
-              href="/orders"
-              submenu={[
+            {links.map((i) => {
+              if (!i.root) return;
+              return (
                 <MenuItem
-                  key="0"
-                  icon={<BiMessageAltAdd />}
-                  label="Add order"
-                  href="/addorder"
-                />,
-                <MenuItem
-                  key="1"
-                  icon={<BiMessageAltEdit />}
-                  label="Edit order"
-                  href="/editorder"
-                />,
-                <MenuItem
-                  key="2"
-                  icon={<BiMessageAltX />}
-                  label="Remove order"
-                  href="/removeorder"
-                />,
-              ]}
-            />
-            <MenuItem
-              icon={<BiUser />}
-              label="Clients"
-              href="/clients"
-              submenu={[
-                <MenuItem
-                  key="0"
-                  icon={<BiMessageSquareAdd />}
-                  label="Add client"
-                  href="/addclient"
-                />,
-                <MenuItem
-                  key="1"
-                  icon={<BiMessageSquareEdit />}
-                  label="Edit client"
-                  href="/editclient"
-                />,
-                <MenuItem
-                  key="2"
-                  icon={<BiMessageSquareX />}
-                  label="Remove client"
-                  href="/removeclient"
-                />,
-              ]}
-            />
+                  key={i.id}
+                  icon={i.icon}
+                  label={i.label}
+                  href={i.href}
+                  submenu={
+                    i.children &&
+                    i.children.map((c) => {
+                      const child = links.find((l) => l.id === c);
+                      return (
+                        <MenuItem
+                          key={child.id}
+                          icon={child.icon}
+                          label={child.label}
+                          href={child.href}
+                        />
+                      );
+                    })
+                  }
+                />
+              );
+            })}
           </ul>
         )}
       </div>

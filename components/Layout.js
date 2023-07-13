@@ -11,11 +11,10 @@ import Sidebar from './Sidebar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Layout(props) {
-  const { children, title } = props;
+  const { children } = props;
   const { authUser, loading, logOut } = useAuth();
   const router = useRouter();
   const [collapsed, setSidebarCollapsed] = useState(true);
-  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     if (!loading && !authUser) router.push('/');
@@ -48,7 +47,6 @@ export default function Layout(props) {
               <Sidebar
                 collapsed={collapsed}
                 setCollapsed={() => setSidebarCollapsed((prev) => !prev)}
-                shown={showSidebar}
               />
               {children}
             </>

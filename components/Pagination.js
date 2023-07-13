@@ -23,7 +23,7 @@ export default function Pagination(props) {
             key={page}
             className={classNames({
               'buttons-group': true,
-              'active': page === currentPage,
+              active: page === currentPage,
             })}
           >
             <span onClick={() => onPageChange(page)}>{page}</span>

@@ -35,13 +35,16 @@ body {
 }
 
 .wrapper {
-  @apply bg-amber-200 dark:bg-gray-800 min-h-screen
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 9fr auto;
   grid-template-areas: "header header" 
                        "side main"
                        "footer footer";
+}
+
+.wrapper {
+  @apply bg-amber-200 dark:bg-gray-800 min-h-screen
 }
 
 .site-header {
@@ -307,6 +310,14 @@ body {
 
 .orders-wrapper {
   @apply flex flex-col ml-4 sm:ml-0
+}
+
+.sidebar-content {
+  @apply bg-purple-700 dark:bg-gray-950 rounded-md dark:text-white h-full
+}
+
+.sidebar-button {
+  @apply flex justify-center align-middle w-10 h-10 rounded-full
 }
 
 @media (max-width: 560px) {

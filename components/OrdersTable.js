@@ -15,8 +15,8 @@ export default function OrdersTable({ data, columns }) {
   };
 
   return (
-    <table className="border-separate border-spacing-y-2 text-sm">
-      <thead className="text-black dark:text-white hidden md:table-header-group">
+    <table className="table-lines">
+      <thead className="thead-transparent">
         <tr>
           {columns.map(({ label, field }) => {
             const cl =
