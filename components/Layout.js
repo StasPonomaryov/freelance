@@ -23,7 +23,7 @@ export default function Layout(props) {
   return (
     <>
       {router.pathname !== '/' ? (
-        <div className={`${inter.className} wrapper`}>
+        <div className={`${inter.className} site-wrapper`}>
           <Head>
             <title>Freelance dashboard</title>
             <meta charSet="utf-8" />

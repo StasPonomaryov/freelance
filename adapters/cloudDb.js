@@ -4,10 +4,9 @@ import {
   getDoc,
   getDocs,
   setDoc,
-  updateDoc,
   deleteDoc,
   query,
-  writeBatch
+  writeBatch,
 } from 'firebase/firestore';
 
 export class CloudDb {
@@ -18,21 +17,8 @@ export class CloudDb {
   }
   /**
    * Get clients list from cloud DB
+   * @returns {Array} client objects
    */
-  async getClient(clientId) {
-    let result = {};
-    const docRef = doc(this.cloudDb, this.clients, `${clientId}`);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      result = docSnap.data();
-      console.log('>>>DOCUMENT', docSnap.data());
-    } else {
-      console.log('>>>NO DOCUMENT FOUND');
-    }
-
-    return result;
-  }
-
   async getClients() {
     let result = [];
     const q = query(collection(this.cloudDb, this.clients));
@@ -46,8 +32,7 @@ export class CloudDb {
 
   /**
    * Save client data
-   * @param {Objects} clientData
-   * @returns
+   * @param {Object} clientData - client object
    */
   async saveClient(clientData) {
     return await setDoc(
@@ -56,38 +41,38 @@ export class CloudDb {
     );
   }
 
+  /**
+   * Update multiple clients
+   * @param {Array} clientsData - client objects
+   */
   async updateClients(clientsData) {
     const batch = writeBatch(this.cloudDb);
     for (const currentClient of clientsData) {
       const docRef = doc(this.cloudDb, this.clients, `${currentClient.id}`);
       batch.update(docRef, currentClient);
     }
+  
     return await batch.commit();
   }
 
+  /**
+   * Remove multiple clients
+   * @param {Array} clientsIds 
+   */
   async removeClients(clientsIds) {
     const batch = writeBatch(this.cloudDb);
     for (const currentClient of clientsIds) {
       const docRef = doc(this.cloudDb, this.clients, `${currentClient}`);
       batch.delete(docRef);
     }
+
     return await batch.commit();
   }
 
-  async getOrder(orderId) {
-    let result = {};
-    const docRef = doc(this.cloudDb, this.tasks, `${orderId}`);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      result = docSnap.data();
-      console.log('>>>DOCUMENT', docSnap.data());
-    } else {
-      console.log('>>>NO DOCUMENT FOUND');
-    }
-
-    return result;
-  }
-
+  /**
+   * Get orders list from cloud DB
+   * @returns {Array} orders objects
+   */
   async getOrders() {
     let result = [];
     const q = query(collection(this.cloudDb, this.tasks));
@@ -99,6 +84,10 @@ export class CloudDb {
     return result;
   }
 
+  /**
+   * Save order data
+   * @param {Object} orderData 
+   */
   async saveOrder(orderData) {
     return await setDoc(
       doc(this.cloudDb, this.tasks, `${orderData.id}`),
@@ -106,7 +95,12 @@ export class CloudDb {
     );
   }
 
+  /**
+   * Remove order by id
+   * @param {String} orderId 
+   * @returns 
+   */
   async removeOrder(orderId) {
-    return await deleteDoc(doc(this.cloudDb, this.tasks, `${orderId}`))
+    return await deleteDoc(doc(this.cloudDb, this.tasks, `${orderId}`));
   }
 }

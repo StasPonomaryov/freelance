@@ -34,7 +34,7 @@ body {
   @apply text-xs text-red-400
 }
 
-.wrapper {
+.site-wrapper {
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 9fr auto;
@@ -43,7 +43,7 @@ body {
                        "footer footer";
 }
 
-.wrapper {
+.site-wrapper {
   @apply bg-amber-200 dark:bg-gray-800 min-h-screen
 }
 

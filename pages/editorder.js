@@ -50,7 +50,11 @@ export default function EditOrder({ orders, clients }) {
       ...(values.taskHours && { hours: values.taskHours }),
     };
     setTask(orderData)
-      .then((r) => setSaved(true))
+      .then((r) => {
+        setValues({});
+        setSaved(true);
+        setTimeout(() => setSaved(false), 5000);
+      })
       .catch((e) => <Alert danger={true} message={e} />);
   }
 
@@ -205,7 +209,7 @@ export default function EditOrder({ orders, clients }) {
                   })}
                   handleChange={handleChange}
                   value={
-                    values.taskStart || new Date().toLocaleDateString('uk-UA')
+                    values.taskEnd || new Date().toLocaleDateString('uk-UA')
                   }
                   req={false}
                   onError={errors.taskEnd}
