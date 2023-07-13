@@ -51,13 +51,13 @@ export class CloudDb {
       const docRef = doc(this.cloudDb, this.clients, `${currentClient.id}`);
       batch.update(docRef, currentClient);
     }
-  
+
     return await batch.commit();
   }
 
   /**
    * Remove multiple clients
-   * @param {Array} clientsIds 
+   * @param {Array} clientsIds
    */
   async removeClients(clientsIds) {
     const batch = writeBatch(this.cloudDb);
@@ -67,6 +67,22 @@ export class CloudDb {
     }
 
     return await batch.commit();
+  }
+
+  /**
+   * Get order by id
+   * @param {String} orderId
+   * @returns {Object} order
+   */
+  async getOrder(orderId) {
+    let result = {};
+    const docRef = doc(this.cloudDb, this.tasks, `${orderId}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      result = docSnap.data();
+    }
+
+    return result;
   }
 
   /**
@@ -86,7 +102,7 @@ export class CloudDb {
 
   /**
    * Save order data
-   * @param {Object} orderData 
+   * @param {Object} orderData
    */
   async saveOrder(orderData) {
     return await setDoc(
@@ -97,8 +113,8 @@ export class CloudDb {
 
   /**
    * Remove order by id
-   * @param {String} orderId 
-   * @returns 
+   * @param {String} orderId
+   * @returns
    */
   async removeOrder(orderId) {
     return await deleteDoc(doc(this.cloudDb, this.tasks, `${orderId}`));
