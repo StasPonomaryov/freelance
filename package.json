@@ -19,6 +19,7 @@
     "nanoid": "^4.0.2",
     "next": "13.3.2",
     "next-remove-imports": "^1.0.11",
+    "nextjs-progressbar": "^0.0.16",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
