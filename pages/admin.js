@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,12 +11,10 @@ import {
 import { Bar } from 'react-chartjs-2';
 import getClients from '@/controllers/getClients';
 import getTasksByYear from '@/controllers/getTasksByYear';
-import {
-  groupBy,
-  getPaidOrders,
-  getFinishedOrdersByYear,
-  getPaidOrdersByYear,
-} from '@/utils';
+import getYearsOfTasks from '@/controllers/getYearsOfTasks';
+import chartClaculations from '@/utils/charts';
+import Select from '@/components/UI/Select';
+import Alert from '@/components/UI/Alert';
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +25,7 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -35,123 +34,127 @@ export const options = {
   },
 };
 
-const labelsYear = ['2023'];
-const labelsMonths = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-const dynamicColor = () => {
-  const r = Math.floor(Math.random() * 255);
-  const g = Math.floor(Math.random() * 255);
-  const b = Math.floor(Math.random() * 255);
-
-  return `rgb(${r},${g},${b})`;
-};
-
-export default function Admin({ clients, filteredOrders }) {
-  const clientsTasksOptions = {
-    ...options,
-    scales: {
-      y: {
-        ticks: {
-          stepSize: 1,
-        },
+const clientsTasksOptions = {
+  ...options,
+  scales: {
+    y: {
+      ticks: {
+        stepSize: 1,
       },
     },
-  };
+  },
+};
 
-  const ordersGroupedByClient = groupBy(filteredOrders, 'clientId');
-  
-  const dataClientsOrders = {
-    labels: labelsYear,
-    datasets: Object.keys(ordersGroupedByClient).map((o) => {
-      return {
-        label: clients.find((c) => c.id === o).name,
-        data: [ordersGroupedByClient[o].length],
-        backgroundColor: dynamicColor(),
-      };
-    }),
-  };
+export default function Admin() {
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [clients, setClients] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [years, setYears] = useState([]);
 
-  const dataClientsIncome = {
-    labels: labelsYear,
-    datasets: Object.keys(ordersGroupedByClient).map((o) => {
-      return {
-        label: clients.find((c) => c.id === o).name,
-        data: [getPaidOrders(ordersGroupedByClient[o])],
-        backgroundColor: dynamicColor(),
-      };
-    }),
-  };
+  useEffect(() => {
+    async function getTasks() {
+      const fetchedClients = await getClients();
+      if (fetchedClients) {
+        console.log(fetchedClients, year);
+        setClients(fetchedClients);
+      }
+      const fetchedYears = await getYearsOfTasks();
+      if (fetchedYears) {
+        console.log(fetchedYears);
+        setYears(fetchedYears);
+      }
+      const fetchedOrders = await getTasksByYear(year);
+      if (fetchedOrders) {
+        console.log(fetchedOrders);
+        setFilteredOrders(fetchedOrders);
+      }
+    }
 
-  const dataYearIncome = {
-    labels: labelsMonths,
-    datasets: [
-      {
-        label: 'UAH',
-        data: getPaidOrdersByYear(filteredOrders),
-        backgroundColor: dynamicColor(),
-      },
-    ],
-  };
+    getTasks();
+  }, [year]);
 
-  const dataYearOrders = {
-    labels: labelsMonths,
-    datasets: [
-      {
-        label: 'count',
-        data: getFinishedOrdersByYear(filteredOrders),
-        backgroundColor: dynamicColor(),
-      },
-    ],
-  };
+  function handleSelect(e) {
+    e.preventDefault();
+    const selectedYear = e.target.value;
+    if (selectedYear) setYear(selectedYear);
+  }
 
   return (
     <main className="page-content">
-      <h1 className="page-title">
-        Analytics
-      </h1>
-      <div className="container flex flex-wrap p-4">
-        <div className="top-clients-income lg:w-1/4">
-          <h2>Top clients (income)</h2>
-          <Bar data={dataClientsIncome} options={options} />
-        </div>
-        <div className="top-clients-tasks lg:w-1/4">
-          <h2>Top clients (orders)</h2>
-          <Bar data={dataClientsOrders} options={clientsTasksOptions} />
-        </div>
-        <div className="top-clients-income lg:w-1/4">
-          <h2>Income by 2023</h2>
-          <Bar data={dataYearIncome} options={options} />
-        </div>
-        <div className="top-clients-tasks lg:w-1/4">
-          <h2>Orders by 2023</h2>
-          <Bar data={dataYearOrders} options={clientsTasksOptions} />
-        </div>
-      </div>
+      <h1 className="page-title">Analytics</h1>
+      {clients.length && filteredOrders.length ? (
+        <>
+          <div className="inline-block p-4">
+            <Select
+              id="years"
+              options={years.map((y) => ({ text: y.toString(), value: y }))}
+              onChange={handleSelect}
+            />
+          </div>
+          <div className="container flex flex-wrap p-4">
+            <div className="top-clients-income lg:w-1/4">
+              <h2>Top clients (income)</h2>
+              <Bar
+                data={chartClaculations(
+                  filteredOrders,
+                  clients,
+                  year
+                ).dataClientsIncome()}
+                options={options}
+              />
+            </div>
+            <div className="top-clients-tasks lg:w-1/4">
+              <h2>Top clients (orders)</h2>
+              <Bar
+                data={chartClaculations(
+                  filteredOrders,
+                  clients,
+                  year
+                ).dataClientsOrders()}
+                options={clientsTasksOptions}
+              />
+            </div>
+            <div className="top-clients-income lg:w-1/4">
+              <h2>Income count</h2>
+              <Bar
+                data={chartClaculations(
+                  filteredOrders,
+                  clients,
+                  year
+                ).dataYearIncome()}
+                options={options}
+              />
+            </div>
+            <div className="top-clients-tasks lg:w-1/4">
+              <h2>Orders count</h2>
+              <Bar
+                data={chartClaculations(
+                  filteredOrders,
+                  clients,
+                  year
+                ).dataYearOrders()}
+                options={clientsTasksOptions}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <Alert danger message="Помилка з'єднання з базою даних" />
+      )}
     </main>
   );
 }
 
-export async function getServerSideProps() {
-  const clients = await getClients();
-  const filteredOrders = await getTasksByYear('2023');
+// export async function getServerSideProps() {
+//   const clients = await getClients();
+//   const years = await getYearsOfTasks();
+//   const filteredOrders = await getTasksByYear('2023');
 
-  return {
-    props: {
-      clients,
-      filteredOrders,
-    },
-  };
-}
+//   return {
+//     props: {
+//       clients,
+//       filteredOrders,
+//       years,
+//     },
+//   };
+// }

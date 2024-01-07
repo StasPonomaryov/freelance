@@ -2,9 +2,9 @@ import Head from 'next/head';
 import { useState } from 'react';
 import getClients from '@/controllers/getClients';
 import removeClients from '@/controllers/removeClients';
-import Alert from '@/components/Alert';
-import Modal from '@/components/Modal';
-import SearchAutoComplete from '@/components/SearchAutoComplete';
+import Alert from '@/components/UI/Alert';
+import Modal from '@/components/UI/Modal';
+import SearchAutoComplete from '@/components/UI/SearchAutoComplete';
 
 export default function RemoveClient({ clients }) {
   const [selected, setSelected] = useState(null);

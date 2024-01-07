@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddClientValidationRules';
 import setClient from '@/controllers/setClient';
-import Alert from '@/components/Alert';
-import InputText from '@/components/InputText';
+import Alert from '@/components/UI/Alert';
+import InputText from '@/components/UI/InputText';
 
 export default function AddClient() {
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(

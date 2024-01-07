@@ -5,12 +5,12 @@ import getClients from '@/controllers/getClients';
 import removeClients from '@/controllers/removeClients';
 import updateClients from '@/controllers/updateClients';
 import { paginate } from '@/utils/Paginate';
-import Alert from '@/components/Alert';
+import Alert from '@/components/UI/Alert';
 import Table from '@/components/Table';
-import Checkbox from '@/components/Checkbox';
-import ButtonGroup from '@/components/ButtonGroup';
+import Checkbox from '@/components/UI/Checkbox';
+import ButtonGroup from '@/components/UI/ButtonGroup';
 import Pagination from '@/components/Pagination';
-import Modal from '@/components/Modal';
+import Modal from '@/components/UI/Modal';
 
 export default function Clients() {
   const [clients, setClients] = useState([]);

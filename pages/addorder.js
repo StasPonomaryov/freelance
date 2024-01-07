@@ -7,12 +7,12 @@ import validate from '@/utils/AddOrderValidationRules';
 import { useState } from 'react';
 import getClients from '@/controllers/getClients';
 import setTask from '@/controllers/setTask';
-import Alert from '@/components/Alert';
-import SearchAutoComplete from '@/components/SearchAutoComplete';
-import RadioButton from '@/components/RadioButton';
-import InputText from '@/components/InputText';
-import InputDate from '@/components/InputDate';
-import InputNumber from '@/components/InputNumber';
+import Alert from '@/components/UI/Alert';
+import SearchAutoComplete from '@/components/UI/SearchAutoComplete';
+import RadioButton from '@/components/UI/RadioButton';
+import InputText from '@/components/UI/InputText';
+import InputDate from '@/components/UI/InputDate';
+import InputNumber from '@/components/UI/InputNumber';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 

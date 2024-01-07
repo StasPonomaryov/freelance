@@ -6,10 +6,10 @@ import remarkGfm from 'remark-gfm';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 import getTasks from '@/controllers/getTasks';
 import { paginate } from '@/utils/Paginate';
-import Alert from '@/components/Alert';
+import Alert from '@/components/UI/Alert';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
-import ButtonGroup from '@/components/ButtonGroup';
+import ButtonGroup from '@/components/UI/ButtonGroup';
 
 export default function Orders({ orders }) {
   const [currentPage, setCurrentPage] = useState(1);

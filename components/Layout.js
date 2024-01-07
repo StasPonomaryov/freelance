@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Inter } from 'next/font/google';
 import { useAuth } from '../context/AuthUserContext';
-import Alert from './Alert';
+import Alert from './UI/Alert';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 

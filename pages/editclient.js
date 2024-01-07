@@ -5,9 +5,9 @@ import getClients from '@/controllers/getClients';
 import setClient from '@/controllers/setClient';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddClientValidationRules';
-import Alert from '@/components/Alert';
-import InputText from '@/components/InputText';
-import SearchAutoComplete from '@/components/SearchAutoComplete';
+import Alert from '@/components/UI/Alert';
+import InputText from '@/components/UI/InputText';
+import SearchAutoComplete from '@/components/UI/SearchAutoComplete';
 
 export default function EditClient({ clients }) {
   const [selected, setSelected] = useState(null);

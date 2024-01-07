@@ -10,12 +10,12 @@ import getClients from '@/controllers/getClients';
 import useForm from '@/hooks/useCustomForm';
 import validate from '@/utils/AddOrderValidationRules';
 import { taskStatuses, toggleStatus } from './addorder';
-import RadioButton from '@/components/RadioButton';
-import Alert from '@/components/Alert';
-import InputText from '@/components/InputText';
-import InputDate from '@/components/InputDate';
-import InputNumber from '@/components/InputNumber';
-import SearchAutoComplete from '@/components/SearchAutoComplete';
+import RadioButton from '@/components/UI/RadioButton';
+import Alert from '@/components/UI/Alert';
+import InputText from '@/components/UI/InputText';
+import InputDate from '@/components/UI/InputDate';
+import InputNumber from '@/components/UI/InputNumber';
+import SearchAutoComplete from '@/components/UI/SearchAutoComplete';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 

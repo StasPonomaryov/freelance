@@ -11,12 +11,26 @@ const tasksRepo = (db) => ({
     const allOrders = await db.getOrders();
     const filtered = allOrders.filter((o) => {
       const date = new Date(o.end);
-      const y = new Date(year);
+      const y = new Date(year.toString());
 
       return date.getYear() === y.getYear();
     });
 
     return filtered;
+  },
+
+  async getYears() {
+    const allOrders = await db.getOrders();
+    let years = [];
+    if (!allOrders || (allOrders && !allOrders.length)) return;
+    allOrders.forEach((order) => {
+      if (order.end) {
+        const date = new Date(order.end);
+        years.push(date.getFullYear());
+      }
+    });
+
+    return [...new Set(years)];
   },
 
   async removeTask(id) {

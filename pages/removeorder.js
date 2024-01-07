@@ -7,9 +7,9 @@ import getTasks from '@/controllers/getTasks';
 import getTask from '@/controllers/getTask';
 import getClients from '@/controllers/getClients';
 import removeTask from '@/controllers/removeTask';
-import Alert from '@/components/Alert';
+import Alert from '@/components/UI/Alert';
 import Table from '@/components/Table';
-import SearchAutoComplete from '@/components/SearchAutoComplete';
+import SearchAutoComplete from '@/components/UI/SearchAutoComplete';
 import { taskStatuses } from './addorder';
 
 export default function RemoveOrder({ orders, clients }) {
