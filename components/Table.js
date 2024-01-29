@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import TableInput from './TableInput';
+import TableInput from './UI/TableInput';
 
 export default function Table(props) {
   const { ths, trs, onChangeInput, onRowClick } = props;

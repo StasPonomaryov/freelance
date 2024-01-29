@@ -12,9 +12,9 @@ import {
   BiMessageSquareAdd,
 } from 'react-icons/bi';
 import classNames from 'classnames';
-import MenuItem from './MenuItem';
+import MenuItem from './UI/MenuItem';
 import styles from './styles/aside.module.scss';
-import MenuIcon from './MenuIcon';
+import MenuIcon from './UI/MenuIcon';
 
 const links = [
   {

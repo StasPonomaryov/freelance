@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styles from './styles/aside.module.scss';
+import styles from '../styles/aside.module.scss';
 
 export default function MenuIcon(props) {
   const { href, icon, label } = props;

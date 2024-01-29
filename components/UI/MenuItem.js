@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { BiCaretDown } from 'react-icons/bi';
-import styles from './styles/aside.module.scss';
+import styles from '../styles/aside.module.scss';
 
 export default function MenuItem(props) {
   const { icon, label, href, submenu } = props;

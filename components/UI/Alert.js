@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 export default function Alert(props) {
-  const { color, warning, info, danger, message } = props;
+  const { warning, info, danger, message } = props;
 
   return (
     <div
