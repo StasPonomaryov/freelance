@@ -8,5 +8,5 @@ import { firebaseFirestore } from '@/lib/firebase';
 export default async function getYearsOfTasks() {
   const connection = new CloudDb(firebaseFirestore);
 
-  return await tasksRepo(connection).getYears();
+  return tasksRepo(connection).getYears();
 }

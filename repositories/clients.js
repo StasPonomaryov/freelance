@@ -1,18 +1,18 @@
 const clientsRepo = (db) => ({
   async getClients() {
-    return await db.getClients();
+    return db.getClients();
   },
 
   async removeClients(clientsIds) {
-    return await db.removeClients(clientsIds);
+    return db.removeClients(clientsIds);
   },
 
   async saveClient(orderData) {
-    return await db.saveClient(orderData);
+    return db.saveClient(orderData);
   },
 
   async updateClients(clientsData) {
-    return await db.updateClients(clientsData);
+    return db.updateClients(clientsData);
   },
 });
 

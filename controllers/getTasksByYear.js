@@ -9,5 +9,5 @@ import { firebaseFirestore } from '@/lib/firebase';
 export default async function getTasksByYear(year) {
   const connection = new CloudDb(firebaseFirestore);
 
-  return await tasksRepo(connection).getTasksByYear(year);
+  return tasksRepo(connection).getTasksByYear(year);
 }

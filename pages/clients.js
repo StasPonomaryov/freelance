@@ -11,6 +11,7 @@ import Checkbox from '@/components/UI/Checkbox';
 import ButtonGroup from '@/components/UI/ButtonGroup';
 import Pagination from '@/components/Pagination';
 import Modal from '@/components/UI/Modal';
+import LoadingSpinner from '@/components/UI/LoadingSpinner';
 
 export default function Clients() {
   const [clients, setClients] = useState([]);
@@ -20,6 +21,7 @@ export default function Clients() {
   const [showModalRemove, setShowModalRemove] = useState(false);
   const [editingMode, setEditingMode] = useState(false);
   const [updateButtonActive, setUpdateButtonActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const pageSize = 10;
   const paginatedPosts = paginate(clients, currentPage, pageSize);
@@ -119,9 +121,19 @@ export default function Clients() {
   }
 
   useEffect(() => {
-    getClients().then((data) => {
-      setClients(data);
-    });
+    async function getClientsData() {
+      setLoading(true);
+      try {
+        const fetchedClients = await getClients();
+        if (fetchedClients?.length) setClients(fetchedClients);
+      } catch (e) {
+        console.log('>>>ERROR', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getClientsData();
   }, []);
 
   return (
@@ -131,7 +143,9 @@ export default function Clients() {
       </Head>
       <h1 className="page-title">Clients list</h1>
       <div className="container p-4">
-        {clients.length > 0 ? (
+        {loading ? (
+          <LoadingSpinner />
+        ) : clients?.length ? (
           <form className="clients-form" onSubmit={handleFormSubmit}>
             <Table
               onChangeInput={handleTableChange}
@@ -200,7 +214,6 @@ export default function Clients() {
         ) : (
           <Alert warning={true} message="No clients found" />
         )}
-
         {showModalRemove && (
           <Modal
             title="Removing client(s)"

@@ -15,6 +15,7 @@ import getYearsOfTasks from '@/controllers/getYearsOfTasks';
 import chartClaculations from '@/utils/charts';
 import Select from '@/components/UI/Select';
 import Alert from '@/components/UI/Alert';
+import LoadingSpinner from '@/components/UI/LoadingSpinner';
 
 ChartJS.register(
   CategoryScale,
@@ -50,23 +51,28 @@ export default function Admin() {
   const [clients, setClients] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [years, setYears] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getTasks() {
-      const fetchedClients = await getClients();
-      if (fetchedClients) {
-        console.log(fetchedClients, year);
-        setClients(fetchedClients);
-      }
-      const fetchedYears = await getYearsOfTasks();
-      if (fetchedYears) {
-        console.log(fetchedYears);
-        setYears(fetchedYears);
-      }
-      const fetchedOrders = await getTasksByYear(year);
-      if (fetchedOrders) {
-        console.log(fetchedOrders);
-        setFilteredOrders(fetchedOrders);
+      setLoading(true);
+      try {
+        const fetchedClients = await getClients();
+        if (fetchedClients?.length) {
+          setClients(fetchedClients);
+        }
+        const fetchedYears = await getYearsOfTasks();
+        if (fetchedYears?.length) {
+          setYears(fetchedYears);
+        }
+        const fetchedOrders = await getTasksByYear(year);
+        if (fetchedOrders?.length) {
+          setFilteredOrders(fetchedOrders);
+        }
+      } catch (e) {
+        console.log('>>>ERROR', e);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -82,7 +88,9 @@ export default function Admin() {
   return (
     <main className="page-content">
       <h1 className="page-title">Analytics</h1>
-      {clients.length && filteredOrders.length ? (
+      {loading ? (
+        <LoadingSpinner />
+      ) : clients.length && filteredOrders.length ? (
         <>
           <div className="inline-block p-4">
             <Select

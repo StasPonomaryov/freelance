@@ -8,5 +8,5 @@ import { firebaseFirestore } from '@/lib/firebase';
 export default async function getClients() {
   const connection = new CloudDb(firebaseFirestore);
 
-  return await clientsRepo(connection).getClients();
+  return clientsRepo(connection).getClients();
 }

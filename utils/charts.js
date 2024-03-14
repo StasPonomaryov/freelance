@@ -38,7 +38,7 @@ const chartClaculations = (filteredOrders, clients, year) => ({
       labels: [year],
       datasets: Object.keys(this.ordersGroupedByClient()).map((o) => {
         return {
-          label: clients.find((c) => c.id === o).name,
+          label: clients?.find((c) => c.id === o).name,
           data: [this.ordersGroupedByClient()[o].length],
           backgroundColor: dynamicColor(),
         };
@@ -51,7 +51,7 @@ const chartClaculations = (filteredOrders, clients, year) => ({
       labels: [year],
       datasets: Object.keys(this.ordersGroupedByClient()).map((o) => {
         return {
-          label: clients.find((c) => c.id === o).name,
+          label: clients?.find((c) => c.id === o).name,
           data: [getPaidOrders(this.ordersGroupedByClient()[o])],
           backgroundColor: dynamicColor(),
         };

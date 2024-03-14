@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -10,10 +10,13 @@ import Alert from '@/components/UI/Alert';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
 import ButtonGroup from '@/components/UI/ButtonGroup';
+import LoadingSpinner from '@/components/UI/LoadingSpinner';
 
-export default function Orders({ orders }) {
+export default function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const [checkedRow, setCheckedRow] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const tableFields = [
     { field: 'title', label: 'Title' },
@@ -51,6 +54,27 @@ export default function Orders({ orders }) {
     },
   ];
 
+  useEffect(() => {
+    async function getTasksData() {
+      setLoading(true);
+      try {
+        const fetchedTasks = await getTasks();
+        if (fetchedTasks?.length) {
+          const orders = fetchedTasks.sort(
+            (a, b) => new Date(b.start) - new Date(a.start)
+          );
+          setOrders(orders);
+        }
+      } catch (e) {
+        console.log('>>>ERROR', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getTasksData();
+  }, []);
+
   function handleRowClick(row) {
     if (checkedRow == row) {
       return setCheckedRow(null);
@@ -76,11 +100,11 @@ export default function Orders({ orders }) {
       <Head>
         <title>Orders | Freelance dashboard</title>
       </Head>
-      <h1 className="page-title">
-        Orders list
-      </h1>
+      <h1 className="page-title">Orders list</h1>
       <div className="container p-4">
-        {orders.length > 0 ? (
+        {loading ? (
+          <LoadingSpinner />
+        ) : orders?.length > 0 ? (
           <div className="orders-wrapper">
             <Table
               ths={tableFields}
@@ -150,15 +174,4 @@ export default function Orders({ orders }) {
       </div>
     </main>
   );
-}
-
-export async function getServerSideProps() {
-  const data = await getTasks();
-  const orders = data.sort((a, b) => new Date(b.start) - new Date(a.start));
-
-  return {
-    props: {
-      orders,
-    },
-  };
 }
