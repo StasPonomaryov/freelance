@@ -62,10 +62,13 @@ export default function AddOrder({ clients }) {
     };
     setTask(orderData)
       .then((r) => {
+        const clearIcons = document.querySelectorAll('.clear-icon');
         setValues({});
         setClientSelected(null);
         setTaskText('**Task description**');
         setTaskStatus(taskStatuses);
+        // trigger clear search autocomplete button
+        clearIcons.forEach((el) => el.click());
         setSaved(true);
         setTimeout(() => setSaved(false), 5000);
       })
